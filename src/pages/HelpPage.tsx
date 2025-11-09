@@ -8,19 +8,39 @@ interface Message {
 }
 
 export default function HelpPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  const [messages, setMessages] = useState<Message[]>(() => {
+    // Load chat history from localStorage
+    const saved = localStorage.getItem('ai-chat-history');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Convert timestamp strings back to Date objects
+        return parsed.map((m: Message) => ({
+          ...m,
+          timestamp: new Date(m.timestamp)
+        }));
+      } catch (e) {
+        console.error('Failed to load chat history:', e);
+      }
+    }
+    // Default welcome message
+    return [{
       role: 'assistant',
       content: '👋 Hallo! Ich bin dein AI-Assistent für die Evolution Simulation. Ich kenne alle Spielmechaniken, deine aktuellen Einstellungen und kann dir bei Fragen und Strategien helfen. Was möchtest du wissen?',
       timestamp: new Date()
-    }
-  ]);
+    }];
+  });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [wasRunning, setWasRunning] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { populations, worldConfig, renderData, running, pauseSimulation, startSimulation } = useSimulationStore();
+
+  // Save chat history to localStorage whenever messages change
+  useEffect(() => {
+    localStorage.setItem('ai-chat-history', JSON.stringify(messages));
+  }, [messages]);
 
   // Pause simulation when entering help page, resume when leaving
   useEffect(() => {
@@ -194,6 +214,19 @@ WICHTIG:
     }
   };
 
+  const clearChat = () => {
+    const confirmClear = window.confirm('Möchtest du den Chat-Verlauf wirklich löschen?');
+    if (confirmClear) {
+      const welcomeMessage: Message = {
+        role: 'assistant',
+        content: '👋 Hallo! Ich bin dein AI-Assistent für die Evolution Simulation. Ich kenne alle Spielmechaniken, deine aktuellen Einstellungen und kann dir bei Fragen und Strategien helfen. Was möchtest du wissen?',
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+      localStorage.removeItem('ai-chat-history');
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl h-[calc(100vh-4rem)]">
       {/* Pause Indicator */}
@@ -210,12 +243,23 @@ WICHTIG:
       <div className="bg-gray-800 rounded-xl shadow-2xl h-full flex flex-col overflow-hidden border border-gray-700">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            🤖 AI-Hilfe & Assistent
-          </h1>
-          <p className="text-blue-100 mt-2">
-            Frag mich alles über die Evolution Simulation!
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold flex items-center gap-3">
+                🤖 AI-Hilfe & Assistent
+              </h1>
+              <p className="text-blue-100 mt-2">
+                Frag mich alles über die Evolution Simulation!
+              </p>
+            </div>
+            <button
+              onClick={clearChat}
+              className="bg-red-500/20 hover:bg-red-500/30 text-red-200 px-4 py-2 rounded-lg transition-colors text-sm border border-red-400/30"
+              title="Chat-Verlauf löschen"
+            >
+              🗑️ Chat löschen
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
