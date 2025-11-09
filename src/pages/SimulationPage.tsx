@@ -5,8 +5,9 @@ import ControlPanel from '../components/Simulation/ControlPanel';
 import StatsDisplay from '../components/Simulation/StatsDisplay';
 
 export default function SimulationPage() {
-  const { initializeSimulation, worker } = useSimulationStore();
+  const { initializeSimulation, worker, running, pauseSimulation } = useSimulationStore();
   const initializedRef = useRef<boolean>(false);
+  const wasRunningRef = useRef<boolean>(false);
 
   // Initialize simulation only once on first mount
   useEffect(() => {
@@ -16,6 +17,20 @@ export default function SimulationPage() {
       initializedRef.current = true;
     }
   }, [initializeSimulation, worker]);
+
+  // Pause simulation when leaving the page, resume when returning
+  useEffect(() => {
+    // Save running state when component mounts
+    wasRunningRef.current = running;
+
+    return () => {
+      // Cleanup: Pause simulation when leaving the page
+      if (running) {
+        console.log('⏸️ Pause simulation (leaving page)');
+        pauseSimulation();
+      }
+    };
+  }, [running, pauseSimulation]);
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-screen-2xl">
