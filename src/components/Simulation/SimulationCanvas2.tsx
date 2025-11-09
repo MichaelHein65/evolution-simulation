@@ -65,7 +65,24 @@ export default function SimulationCanvas2() {
 
   // Render organisms and food from worker data (with object pooling!)
   useEffect(() => {
-    if (!appRef.current || !renderData || !organismContainerRef.current || !foodContainerRef.current) {
+    if (!appRef.current || !organismContainerRef.current || !foodContainerRef.current) {
+      return;
+    }
+
+    // Clear canvas if no render data (e.g., after reset)
+    if (!renderData) {
+      const organismPool = organismGraphicsPoolRef.current;
+      const foodPool = foodGraphicsPoolRef.current;
+      
+      // Hide all graphics
+      organismPool.forEach((graphic) => {
+        graphic.clear();
+      });
+      foodPool.forEach((graphic) => {
+        graphic.visible = false;
+      });
+      
+      console.log('🧹 Canvas cleared (no render data)');
       return;
     }
 
