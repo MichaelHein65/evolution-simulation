@@ -17,9 +17,27 @@ export default function HelpPage() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [wasRunning, setWasRunning] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { populations, worldConfig, renderData } = useSimulationStore();
+  const { populations, worldConfig, renderData, running, pauseSimulation, startSimulation } = useSimulationStore();
+
+  // Pause simulation when entering help page, resume when leaving
+  useEffect(() => {
+    if (running) {
+      setWasRunning(true);
+      pauseSimulation();
+      console.log('⏸️ Simulation pausiert für AI-Hilfe');
+    }
+
+    return () => {
+      // Resume simulation when leaving page if it was running before
+      if (wasRunning) {
+        startSimulation();
+        console.log('▶️ Simulation fortgesetzt');
+      }
+    };
+  }, []);
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
@@ -118,6 +136,17 @@ ${stats}
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl h-[calc(100vh-4rem)]">
+      {/* Pause Indicator */}
+      {wasRunning && (
+        <div className="mb-4 bg-yellow-900/50 border border-yellow-600 rounded-lg p-3 text-yellow-200 flex items-center gap-2">
+          <span className="text-xl">⏸️</span>
+          <span className="text-sm">
+            Die Simulation wurde pausiert, damit du dich in Ruhe beraten lassen kannst. 
+            Sie wird automatisch fortgesetzt, wenn du die Hilfe-Seite verlässt.
+          </span>
+        </div>
+      )}
+      
       <div className="bg-gray-800 rounded-xl shadow-2xl h-full flex flex-col overflow-hidden border border-gray-700">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
