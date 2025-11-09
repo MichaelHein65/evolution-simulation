@@ -158,11 +158,11 @@ export default function EvolutionPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-6" key={statsHistory.length}>
           {/* Population Chart */}
           <div className="bg-gray-800 rounded-lg p-6">
             <div style={{ height: '400px' }}>
-              <Line data={populationData} options={options} />
+              <Line key={`pop-${statsHistory.length}`} data={populationData} options={options} />
             </div>
           </div>
 
@@ -170,6 +170,7 @@ export default function EvolutionPage() {
           <div className="bg-gray-800 rounded-lg p-6">
             <div style={{ height: '300px' }}>
               <Line
+                key={`total-${statsHistory.length}`}
                 data={totalData}
                 options={{
                   ...options,
