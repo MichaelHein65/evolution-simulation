@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolution Simulation - Web Worker Performance Architecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Evolution Simulation</h1>
+            <p>Web Worker Multi-Threading | Object Pooling | Spatial Hash Grid</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Simulation Canvas -->
+            <div class="simulation-panel">
+                <div id="canvas-container"></div>
+                <div class="controls">
+                    <button id="startBtn" class="btn btn-primary">Start</button>
+                    <button id="pauseBtn" class="btn">Pause</button>
+                    <button id="resetBtn" class="btn">Reset</button>
+                    <button id="saveBtn" class="btn">Save</button>
+                    <button id="loadBtn" class="btn">Load</button>
+                    <span class="stats">
+                        Generation: <span id="generation">0</span> | 
+                        Organisms: <span id="organismCount">0</span> | 
+                        FPS: <span id="fps">0</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Trait Editor Panel -->
+            <div class="trait-panel">
+                <h2>Population Traits</h2>
+                <div class="population-tabs" id="populationTabs">
+                    <button class="tab-btn active" data-pop="0">Pop 1</button>
+                    <button class="tab-btn" data-pop="1">Pop 2</button>
+                    <button class="tab-btn" data-pop="2">Pop 3</button>
+                    <button class="tab-btn" data-pop="3">Pop 4</button>
+                    <button class="tab-btn" data-pop="4">Pop 5</button>
+                </div>
+                <div id="traitEditor" class="trait-editor"></div>
+            </div>
+        </div>
+
+        <!-- Evolution Charts -->
+        <div class="charts-section">
+            <h2>Evolution Statistics</h2>
+            <div class="charts-container">
+                <canvas id="populationChart"></canvas>
+                <canvas id="traitChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.3.2/dist/pixi.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/spatialHashGrid.js"></script>
+    <script src="js/objectPool.js"></script>
+    <script src="js/organism.js"></script>
+    <script src="js/simulation.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

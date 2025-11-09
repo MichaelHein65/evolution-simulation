@@ -1,0 +1,25 @@
+{
+  "name": "evolution-simulation",
+  "version": "1.0.0",
+  "description": "Interactive Evolution Simulation with Web Worker Performance Architecture",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 8080 -c-1",
+    "start": "npx http-server -p 8080"
+  },
+  "keywords": [
+    "evolution",
+    "simulation",
+    "web-worker",
+    "pixi.js",
+    "performance"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "pixi.js": "^7.3.2"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
