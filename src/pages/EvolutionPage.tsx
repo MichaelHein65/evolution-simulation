@@ -27,7 +27,7 @@ ChartJS.register(
 );
 
 export default function EvolutionPage() {
-  const { statsHistory, populations } = useSimulationStore();
+  const { statsHistory, populations, tick } = useSimulationStore();
 
   // Prepare data for population chart
   const populationData = {
@@ -158,11 +158,11 @@ export default function EvolutionPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-6" key={statsHistory.length}>
+        <div className="space-y-6" key={`charts-${tick}-${statsHistory.length}`}>
           {/* Population Chart */}
           <div className="bg-gray-800 rounded-lg p-6">
             <div style={{ height: '400px' }}>
-              <Line key={`pop-${statsHistory.length}`} data={populationData} options={options} />
+              <Line data={populationData} options={options} />
             </div>
           </div>
 
@@ -170,7 +170,6 @@ export default function EvolutionPage() {
           <div className="bg-gray-800 rounded-lg p-6">
             <div style={{ height: '300px' }}>
               <Line
-                key={`total-${statsHistory.length}`}
                 data={totalData}
                 options={{
                   ...options,

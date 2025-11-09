@@ -141,6 +141,13 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
           
         case 'STATS':
           const { statsHistory } = get();
+          
+          // Ignore stats from tick 0 if we just reset (prevents stale stats after reset)
+          if (statsHistory.length === 0 && payload.tick === 0) {
+            console.log('🔄 Ignoring tick 0 stats after reset');
+            break;
+          }
+          
           const newStats: PopulationStats = {
             tick: payload.tick,
             populationCounts: payload.populationCounts,
