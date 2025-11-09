@@ -90,13 +90,19 @@ ${stats}
     setIsLoading(true);
 
     try {
+      // Only send messages after the initial greeting (skip first message)
+      const chatHistory = messages
+        .slice(1) // Skip the initial greeting
+        .map(m => ({ role: m.role, content: m.content }))
+        .concat([{ role: 'user', content: userMessage.content }]);
+
       const response = await fetch('http://localhost:3001/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: messages.map(m => ({ role: m.role, content: m.content })),
+          messages: chatHistory,
           systemContext: buildSystemContext()
         }),
       });
