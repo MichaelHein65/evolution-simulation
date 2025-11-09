@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useSimulationStore } from './store/simulationStore';
 import SimulationCanvas2 from './components/Simulation/SimulationCanvas2';
@@ -8,7 +8,6 @@ import SettingsPage2 from './pages/SettingsPage2';
 import './index.css';
 
 function AppContent() {
-  const location = useLocation();
   const { initializeSimulation, worker } = useSimulationStore();
   const initializedRef = useRef<boolean>(false);
 
@@ -20,8 +19,6 @@ function AppContent() {
       initializedRef.current = true;
     }
   }, [initializeSimulation, worker]);
-
-  const isSimulationPage = location.pathname === '/';
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -54,14 +51,16 @@ function AppContent() {
         </div>
       </nav>
 
-      {/* Canvas - Always rendered, but only visible on Simulation page */}
-      <div style={{ display: isSimulationPage ? 'block' : 'none' }}>
-        <SimulationCanvas2 />
-      </div>
-
       {/* Routes */}
       <Routes>
-        <Route path="/" element={<SimulationPage />} />
+        <Route path="/" element={
+          <>
+            <div className="container mx-auto px-4 py-4 max-w-screen-2xl">
+              <SimulationCanvas2 />
+            </div>
+            <SimulationPage />
+          </>
+        } />
         <Route path="/evolution" element={<EvolutionPage />} />
         <Route path="/settings" element={<SettingsPage2 />} />
       </Routes>
