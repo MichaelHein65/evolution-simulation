@@ -52,7 +52,7 @@ export default function HelpPage() {
   const buildSystemContext = () => {
     const populationInfo = populations.map(pop => {
       const t = pop.defaultTraits;
-      return `${pop.name} (${pop.color}): ${pop.initialCount} initial, Speed: ${t.speed.toFixed(1)}, Size: ${t.size}, MaxEnergy: ${t.maxEnergy}, Vision: ${t.visionRange}, Aggression: ${t.aggression.toFixed(1)}, Social: ${t.socialBehavior.toFixed(1)}`;
+      return `${pop.name} (${pop.color}): ${pop.initialCount} initial, Speed: ${t.speed.toFixed(1)}, Size: ${t.size}, MaxEnergy: ${t.maxEnergy}, Vision: ${t.visionRange}, Aggression: ${t.aggression.toFixed(1)}, Social: ${t.socialBehavior.toFixed(1)}, ReproductionRate: ${t.reproductionRate}, MaxAge: ${t.maxAge}`;
     }).join('\n');
 
     const stats = renderData ? `
@@ -61,18 +61,72 @@ Nahrung verfügbar: ${renderData.food.length}
 ` : 'Simulation nicht gestartet';
 
     return `
-POPULATIONS-EINSTELLUNGEN:
+=== POPULATIONS-EINSTELLUNGEN ===
 ${populationInfo}
 
-WELT-KONFIGURATION:
+=== WELT-KONFIGURATION ===
 Weltbreite: ${worldConfig.width}px
 Welthöhe: ${worldConfig.height}px
 Nahrung-Spawn-Rate: ${worldConfig.foodSpawnRate}
 Max. Nahrung: ${worldConfig.maxFoodCount}
-Nahrung-Energie: ${worldConfig.foodEnergyValue}
+Nahrung-Energie-Wert: ${worldConfig.foodEnergyValue}
 
-AKTUELLE STATISTIKEN:
+=== AKTUELLE STATISTIKEN ===
 ${stats}
+
+=== SPIELMECHANIKEN (EXAKTE REGELN) ===
+
+REPRODUKTION:
+- Voraussetzungen:
+  * Organismus muss mindestens 80% seiner MaxEnergy haben (energyThreshold = maxEnergy * 0.8)
+  * Organismus muss mindestens 50 Ticks alt sein (ageThreshold = 50)
+- Wahrscheinlichkeit pro Frame: reproductionRate / 100000
+  * Beispiel: Bei reproductionRate=50 → 0.05% pro Frame → ~3% pro Sekunde
+- Kosten: 50% der aktuellen Energie geht an das Nachkommen
+- Nachkomme startet mit dieser Energie
+- Mutation: Aktuell NICHT implementiert (geplant für später)
+
+ALTERUNG & TOD:
+- Jeder Tick erhöht das Alter um 1
+- Tod durch Alter: wenn age >= maxAge
+- Tod durch Hunger: wenn energy <= 0
+- Organismen werden dann aus der Simulation entfernt
+
+ENERGIE-SYSTEM:
+- Bewegung kostet Energie: Jede Bewegung verbraucht Energie basierend auf Speed und Size
+- Nahrung sammeln: Organismen in der Nähe von Nahrung nehmen sie auf
+- Energie-Gewinn: foodEnergyValue wird zur Energie addiert
+- Max-Energie: Begrenzt durch maxEnergy Trait
+
+BEWEGUNG & WAHRNEHMUNG:
+- Vision Range: Organismen sehen Nahrung und andere Organismen in diesem Radius
+- Speed: Bestimmt wie schnell sich ein Organismus bewegt
+- Agility: Beeinflusst Wendigkeit (wie schnell sie Richtung ändern)
+
+SOZIALVERHALTEN:
+- Social Behavior (0-100): Je höher, desto stärker Gruppenbildung
+- Organismen mit hohem Social-Wert bilden Schwärme
+- Visuell: Blaues Leuchten um Organismen in Gruppen
+- Performance: Verwendet Spatial Hash Grid für O(1) Nachbar-Suche
+
+AGGRESSION & JAGD:
+- Aggression (0-100): Je höher, desto wahrscheinlicher Jagdverhalten
+- Jäger greifen kleinere/schwächere Organismen an
+- Erfolgreiche Jagd: Jäger bekommt Energie des Opfers
+- Visuell: Oranges Leuchten beim aktiven Jagen
+- Tod des Opfers bei erfolgreichem Angriff
+
+PERFORMANCE-OPTIMIERUNGEN:
+- Web Worker: Simulation läuft in separatem Thread (60 FPS)
+- Spatial Hash Grid: O(1) Nachbar-Suche statt O(n²)
+- Object Pooling: Wiederverwendbare Pixi.js Graphics
+- Render-Throttling: Nur jeder 2. Frame wird gerendert (30 FPS Display)
+- Max. Organismen: Theoretisch 5000+, praktisch begrenzt durch Browser
+
+WICHTIG: 
+- Alle Zahlen oben sind die EXAKTEN Werte aus dem Code
+- Wenn du Fragen zu Mechaniken beantwortest, beziehe dich IMMER auf diese konkreten Werte
+- KEINE Fantasie-Antworten - nur was hier dokumentiert ist!
 `;
   };
 
