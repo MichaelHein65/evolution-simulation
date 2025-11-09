@@ -5,6 +5,25 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.3.1] - 2025-11-09
+
+### 🐛 Bugfixes
+- **Canvas-Reset**: Simulation-Canvas wird beim Reset korrekt geleert
+  - Graphics werden explizit gelöscht wenn `renderData === null`
+  - Console-Log "🧹 Canvas cleared (no render data)" zur Bestätigung
+- **Chart-Performance**: Evolution-Grafiken "pumpen" nicht mehr
+  - Key-Attribute entfernt die bei jedem Tick Charts neu mounteten
+  - Charts updaten jetzt smooth durch ihre eigene Update-Logik
+- **Stats-Filter**: Tick 0 Stats werden nach Reset ignoriert
+  - Verhindert dass alte Stats zur geleerten History hinzugefügt werden
+  - Console-Log "🔄 Ignoring tick 0 stats after reset"
+
+### 🛠️ Technisch
+- `terser` als Dev-Dependency hinzugefügt für Production-Builds
+- Build-Prozess funktioniert jetzt einwandfrei
+
+---
+
 ## [1.3.0] - 2025-11-09
 
 ### ✨ Neue Features
@@ -14,8 +33,14 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
   - Sieht Live-Statistiken der laufenden Simulation
   - Natürlichsprachliche Konversation auf Deutsch
   - Modernes Chat-Interface mit Message-History
+  - **Persistenter Chat**: Verlauf bleibt über Sessions erhalten (localStorage)
+  - **Chat löschen**: Button zum Zurücksetzen mit Bestätigung
 - **Backend-Server**: Express.js Server für sichere OpenAI API-Calls (Port 3001)
 - **Kontext-System**: AI erhält vollständigen Spiel-Kontext bei jeder Anfrage
+  - Umfassende Spielmechanik-Dokumentation (80+ Zeilen)
+  - Konkrete Formeln für Reproduktion, Energie, Aging, Tod
+  - Performance-Details (Spatial Hash Grid, Object Pooling)
+- **Auto-Pause**: Simulation pausiert automatisch bei AI-Beratung
 - **Auto-Scroll**: Chat scrollt automatisch zu neuesten Nachrichten
 - **Loading-States**: Animierte Lade-Indikatoren während AI antwortet
 
@@ -24,12 +49,14 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - AI-Hilfe auch in Landing Page Footer verlinkt
 - Gradient-Header für Hilfe-Seite
 - Responsive Chat-Design
+- "Chat löschen" Button mit roter Farbe und Confirm-Dialog
 
 ### 🛠️ Technisch
 - OpenAI SDK integriert
 - Express + CORS für Backend
 - Concurrently für paralleles Frontend/Backend Development
 - Neue npm Scripts: `npm run server`, `npm run dev:all`
+- Strikte AI-Prompts gegen Spekulation
 
 ---
 

@@ -22,7 +22,7 @@
 - **Styling**: Tailwind CSS
 
 ## Current Status
-✅ Version 1.3.0 - AI-Hilfe mit ChatGPT-4o Integration!
+✅ Version 1.3.1 - Bugfixes: Canvas-Reset & Chart-Performance
 
 **Live Demo**: https://michaelhein65.github.io/evolution-simulation/
 **Lokal**: http://localhost:5173/evolution-simulation/
@@ -40,6 +40,8 @@
 - ✅ **AI-Hilfe-Seite** - ChatGPT-4o Integration für Fragen und Strategien
 - ✅ **Backend-Server** - Express.js für sichere OpenAI API-Calls
 - ✅ **Kontext-System** - AI erhält vollständigen Spiel-Kontext
+- ✅ **Persistenter Chat** - Verlauf bleibt über Sessions erhalten
+- ✅ **Chat löschen** - Button zum Zurücksetzen der Konversation
 - ✅ **Landing Page** - Professionelle Begrüßungsseite mit Intro-Animation
 - ✅ **Sticky Navigation** - Bleibt beim Scrollen sichtbar (Landing + Interne Seiten)
 - ✅ **Optimiertes Routing** - Landing auf /, Simulation auf /simulation, Hilfe auf /help
@@ -51,6 +53,8 @@
 - ✅ **Spatial Hash Grid** für O(1) Nachbar-Suche statt O(n²)
 - ✅ **LocalStorage Persistierung** - Einstellungen bleiben nach Neustart erhalten
 - ✅ **Zoom & Pan** in Evolution-Grafiken - Zeitachse durchsuchbar
+- ✅ **Reset-Bug behoben** - Canvas & Charts werden korrekt geleert
+- ✅ **Chart-Performance** - Evolution-Grafiken laufen smooth ohne Pumpen
 - ✅ 5 Basis-Populationen (Sprinter, Tank, Jäger, Sammler, Allrounder)
 - ✅ Simulations-Engine mit Organismus- und Welt-Klassen
 - ✅ Energie-System (Bewegung kostet Energie, Nahrung gibt Energie)
