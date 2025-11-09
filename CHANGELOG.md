@@ -8,7 +8,12 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 ## [1.1.0] - 2025-11-09
 
 ### 🐛 Bugfixes
-- **Seitenwechsel-Problem behoben**: Simulation wird jetzt automatisch pausiert beim Verlassen der Simulation-Seite, verhindert "Evolutions-Sprünge" beim Zurückkehren
+- **Seitenwechsel-Problem behoben**: Canvas ist jetzt persistent und wird nicht mehr destroyed/recreated beim Seitenwechsel
+- **Simulation läuft weiter**: Worker läuft auf allen Seiten weiter, Evolution-Seite zeigt Live-Updates
+- **Keine "Time Warps" mehr**: Visuelle Sprünge beim Zurückkehren zur Simulation eliminiert
+- **Sofortige Anzeige**: Canvas wird direkt beim Laden der Simulation-Seite angezeigt
+
+**Technische Details**: Canvas wurde von SimulationPage nach App.tsx verschoben und wird nur noch mit CSS versteckt/angezeigt statt unmounted/mounted. Dies verhindert den Verlust des Pixi.js Rendering-Kontexts.
 
 ### 📝 Changelog
 - CHANGELOG.md Datei hinzugefügt für bessere Versionsverwaltung
