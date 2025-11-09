@@ -69,6 +69,7 @@ export default function SimulationCanvas2() {
       return;
     }
 
+    // Only render if component is mounted (prevents accumulated updates)
     const renderStart = performance.now();
     
     try {
@@ -96,7 +97,7 @@ export default function SimulationCanvas2() {
           organismContainer.addChild(graphic);
         }
 
-        // Update graphic
+        // Update graphic (always update position, even if not visible before)
         graphic.clear();
         
         const size = (organism.size / 100) * 15 + 5;
