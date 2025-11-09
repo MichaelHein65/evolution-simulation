@@ -12,8 +12,9 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Simulation läuft weiter**: Worker läuft auf allen Seiten weiter, Evolution-Seite zeigt Live-Updates
 - **Keine "Time Warps" mehr**: Visuelle Sprünge beim Zurückkehren zur Simulation eliminiert
 - **Sofortige Anzeige**: Canvas wird direkt beim Laden der Simulation-Seite angezeigt
+- **Canvas-Zentrierung**: Canvas ist jetzt mittig und korrekt im Container-Layout positioniert
 
-**Technische Details**: Canvas wurde von SimulationPage nach App.tsx verschoben und wird nur noch mit CSS versteckt/angezeigt statt unmounted/mounted. Dies verhindert den Verlust des Pixi.js Rendering-Kontexts.
+**Technische Details**: Canvas wurde von SimulationPage nach App.tsx verschoben und wird nur noch mit CSS versteckt/angezeigt statt unmounted/mounted. Dies verhindert den Verlust des Pixi.js Rendering-Kontexts. Der Canvas ist jetzt in einem `container mx-auto` Wrapper für korrekte Zentrierung.
 
 ### 📝 Changelog
 - CHANGELOG.md Datei hinzugefügt für bessere Versionsverwaltung
