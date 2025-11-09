@@ -5,6 +5,34 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.3.0] - 2025-11-09
+
+### ✨ Neue Features
+- **AI-Hilfe-Seite**: Intelligenter Chat-Assistent mit ChatGPT-4o Integration
+  - Beantwortet Fragen zu Spielmechaniken und Strategien
+  - Kennt alle aktuellen Einstellungen (Populationen, Traits, Weltconfig)
+  - Sieht Live-Statistiken der laufenden Simulation
+  - Natürlichsprachliche Konversation auf Deutsch
+  - Modernes Chat-Interface mit Message-History
+- **Backend-Server**: Express.js Server für sichere OpenAI API-Calls (Port 3001)
+- **Kontext-System**: AI erhält vollständigen Spiel-Kontext bei jeder Anfrage
+- **Auto-Scroll**: Chat scrollt automatisch zu neuesten Nachrichten
+- **Loading-States**: Animierte Lade-Indikatoren während AI antwortet
+
+### 🎨 UI-Verbesserungen
+- "🤖 Hilfe" Link in Navigation hinzugefügt
+- AI-Hilfe auch in Landing Page Footer verlinkt
+- Gradient-Header für Hilfe-Seite
+- Responsive Chat-Design
+
+### 🛠️ Technisch
+- OpenAI SDK integriert
+- Express + CORS für Backend
+- Concurrently für paralleles Frontend/Backend Development
+- Neue npm Scripts: `npm run server`, `npm run dev:all`
+
+---
+
 ## [1.2.0] - 2025-11-09
 
 ### ✨ Neue Features

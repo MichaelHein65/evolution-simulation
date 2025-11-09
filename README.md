@@ -5,13 +5,20 @@
 [![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.4-646cff.svg)](https://vitejs.dev/)
 [![Pixi.js](https://img.shields.io/badge/Pixi.js-8.5-ff6680.svg)](https://pixijs.com/)
-[![Version](https://img.shields.io/badge/Version-1.2.0-green.svg)](https://github.com/MichaelHein65/evolution-simulation)
+[![Version](https://img.shields.io/badge/Version-1.3.0-green.svg)](https://github.com/MichaelHein65/evolution-simulation)
+[![AI](https://img.shields.io/badge/AI-GPT--4o-orange.svg)](https://openai.com/)
 
-Eine hochperformante, interaktive Evolution-Simulation mit Web Worker Multi-Threading Architektur. Beobachte wie verschiedene Organismen-Populationen um Ressourcen konkurrieren, jagen, Schwärme bilden und sich entwickeln.
+Eine hochperformante, interaktive Evolution-Simulation mit Web Worker Multi-Threading Architektur und AI-gestützter Hilfe. Beobachte wie verschiedene Organismen-Populationen um Ressourcen konkurrieren, jagen, Schwärme bilden und sich entwickeln.
 
 🌐 **[Live Demo](https://michaelhein65.github.io/evolution-simulation/)**
 
 ## ✨ Hauptfeatures
+
+### 🤖 AI-Hilfe (NEU in v1.3.0)
+- **ChatGPT-4o Integration** - Intelligenter Assistent für Fragen und Strategien
+- **Kontext-Bewusst** - Kennt alle aktuellen Einstellungen und Live-Statistiken
+- **Natürlichsprachlich** - Beantwortet Fragen auf Deutsch
+- **Modernes Chat-Interface** - Message-History mit Auto-Scroll
 
 ### 🎯 Landing Page
 - **Professionelle Begrüßungsseite** mit animiertem Intro
@@ -68,17 +75,23 @@ cd evolution-simulation
 # Dependencies installieren
 npm install
 
-# Development Server starten
-npm run dev
+# OpenAI API-Key setzen (für AI-Hilfe)
+export OPENAI_API_KEY="dein-api-key-hier"
+
+# Development Server starten (Frontend + Backend)
+npm run dev:all
 ```
 
-Die Anwendung läuft dann auf `http://localhost:5173/`
+Die Anwendung läuft dann auf `http://localhost:5173/` (Frontend) und `http://localhost:3001/` (AI-Backend)
 
 ### Alternative Start-Befehle
 
 ```bash
-npm start                # Server + Safari öffnen
-npm run start:fullscreen # Server + Safari im Fullscreen
+npm run dev        # Nur Frontend
+npm run server     # Nur AI-Backend
+npm run dev:all    # Frontend + Backend gleichzeitig
+npm start          # Server + Safari öffnen
+npm run start:fullscreen  # Server + Safari im Fullscreen
 ```
 
 ## 🎮 Bedienung
@@ -86,7 +99,13 @@ npm run start:fullscreen # Server + Safari im Fullscreen
 ### Landing Page
 - 🚀 **Simulation starten** - Zur interaktiven Simulation
 - 📖 **Feature-Übersicht** - Alle Funktionen im Überblick
-- 🔗 **Quick Links** - Direkt zu Evolution-Grafiken oder Einstellungen
+- 🔗 **Quick Links** - Direkt zu Evolution-Grafiken, Einstellungen oder AI-Hilfe
+
+### AI-Hilfe-Seite (NEU!)
+- 💬 **Fragen stellen** - Alles über Spielmechaniken, Strategien, Features
+- 📊 **Kontext-basierte Antworten** - AI kennt deine aktuellen Einstellungen
+- 🎯 **Tipps & Tricks** - Konkrete Empfehlungen für bessere Ergebnisse
+- ⌨️ **Enter** zum Senden, **Shift+Enter** für neue Zeile
 
 ### Simulation-Seite
 - ▶️ **Play/Pause** - Simulation starten/stoppen

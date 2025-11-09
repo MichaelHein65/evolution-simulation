@@ -111,6 +111,10 @@ export default function LandingPage() {
             <Link to="/settings" className="hover:text-pink-400 transition-colors">
               ⚙️ Einstellungen
             </Link>
+            <span>•</span>
+            <Link to="/help" className="hover:text-green-400 transition-colors">
+              🤖 AI-Hilfe
+            </Link>
           </div>
         </div>
       </div>

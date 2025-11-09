@@ -22,10 +22,11 @@
 - **Styling**: Tailwind CSS
 
 ## Current Status
-✅ Version 1.2.0 - Landing Page und Sticky Navigation implementiert!
+✅ Version 1.3.0 - AI-Hilfe mit ChatGPT-4o Integration!
 
 **Live Demo**: https://michaelhein65.github.io/evolution-simulation/
 **Lokal**: http://localhost:5173/evolution-simulation/
+**AI-Backend**: http://localhost:3001/
 
 ## Architektur
 🚀 **Web Worker Performance-Architektur**:
@@ -36,9 +37,12 @@
 - **Volle Performance**: MacBook-Leistung wird optimal genutzt
 
 ## Implementierte Features
+- ✅ **AI-Hilfe-Seite** - ChatGPT-4o Integration für Fragen und Strategien
+- ✅ **Backend-Server** - Express.js für sichere OpenAI API-Calls
+- ✅ **Kontext-System** - AI erhält vollständigen Spiel-Kontext
 - ✅ **Landing Page** - Professionelle Begrüßungsseite mit Intro-Animation
 - ✅ **Sticky Navigation** - Bleibt beim Scrollen sichtbar (Landing + Interne Seiten)
-- ✅ **Optimiertes Routing** - Landing auf /, Simulation auf /simulation
+- ✅ **Optimiertes Routing** - Landing auf /, Simulation auf /simulation, Hilfe auf /help
 - ✅ Web Worker mit kompletter Simulation-Engine
 - ✅ Multi-Threading: Simulation läuft parallel zum Rendering
 - ✅ Message-basierte Kommunikation (INIT, START, STOP, RESET, SET_SPEED)
@@ -59,6 +63,7 @@
 - ✅ Sozialverhalten (blaues Leuchten bei Gruppen)
 - ✅ Jagd-Mechanik (oranges Leuchten beim Jagen)
 - ✅ 4 Seiten: Landing, Simulation, Evolution, Einstellungen
+- ✅ 5. Seite: AI-Hilfe mit Chat-Interface
 - ✅ React Router Navigation mit basename für GitHub Pages
 - ✅ Zustand State Management mit Worker-Integration
 - ✅ Tailwind CSS Styling mit Gradients und Backdrop-Blur

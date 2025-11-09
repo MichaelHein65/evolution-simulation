@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import SimulationPage from './pages/SimulationPage';
 import EvolutionPage from './pages/EvolutionPage';
 import SettingsPage2 from './pages/SettingsPage2';
+import HelpPage from './pages/HelpPage';
 import './index.css';
 
 function AppContent() {
@@ -54,6 +55,12 @@ function AppContent() {
                 >
                   Einstellungen
                 </Link>
+                <Link
+                  to="/help"
+                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors flex items-center gap-1"
+                >
+                  <span>🤖</span> Hilfe
+                </Link>
               </div>
             </div>
           </div>
@@ -73,6 +80,7 @@ function AppContent() {
         } />
         <Route path="/evolution" element={<EvolutionPage />} />
         <Route path="/settings" element={<SettingsPage2 />} />
+        <Route path="/help" element={<HelpPage />} />
       </Routes>
     </div>
   );

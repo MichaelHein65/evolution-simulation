@@ -1,7 +1,7 @@
 {
   "name": "evolution-simulation",
-  "version": "1.2.0",
-  "description": "🧬 Hochperformante Evolution-Simulation mit Web Worker Multi-Threading, Pixi.js und React",
+  "version": "1.3.0",
+  "description": "🧬 Hochperformante Evolution-Simulation mit Web Worker Multi-Threading, Pixi.js, React und AI-Hilfe",
   "author": "Michael Hein",
   "license": "MIT",
   "type": "module",
@@ -27,6 +27,8 @@
   "homepage": "https://github.com/MichaelHein65/evolution-simulation#readme",
   "scripts": {
     "dev": "vite",
+    "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
+    "server": "node server.js",
     "start": "vite & sleep 2 && open -a Safari http://localhost:5173",
     "start:fullscreen": "vite & sleep 3 && osascript -e 'tell application \"Safari\" to activate' -e 'tell application \"Safari\" to open location \"http://localhost:5173\"' -e 'delay 2' -e 'tell application \"System Events\" to keystroke \"f\" using {command down, control down}'",
     "build": "tsc -b && vite build",
@@ -36,6 +38,11 @@
   "dependencies": {
     "chart.js": "^4.4.6",
     "chartjs-plugin-zoom": "^2.2.0",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "openai": "^6.8.1",
     "pixi.js": "^8.5.2",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
