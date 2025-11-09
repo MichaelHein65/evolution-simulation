@@ -22,9 +22,10 @@
 - **Styling**: Tailwind CSS
 
 ## Current Status
-✅ Projekt vollständig mit Web Worker Architektur eingerichtet!
+✅ Version 1.2.0 - Landing Page und Sticky Navigation implementiert!
 
-Server läuft auf: http://localhost:5173/
+**Live Demo**: https://michaelhein65.github.io/evolution-simulation/
+**Lokal**: http://localhost:5173/evolution-simulation/
 
 ## Architektur
 🚀 **Web Worker Performance-Architektur**:
@@ -35,6 +36,9 @@ Server läuft auf: http://localhost:5173/
 - **Volle Performance**: MacBook-Leistung wird optimal genutzt
 
 ## Implementierte Features
+- ✅ **Landing Page** - Professionelle Begrüßungsseite mit Intro-Animation
+- ✅ **Sticky Navigation** - Bleibt beim Scrollen sichtbar (Landing + Interne Seiten)
+- ✅ **Optimiertes Routing** - Landing auf /, Simulation auf /simulation
 - ✅ Web Worker mit kompletter Simulation-Engine
 - ✅ Multi-Threading: Simulation läuft parallel zum Rendering
 - ✅ Message-basierte Kommunikation (INIT, START, STOP, RESET, SET_SPEED)
@@ -54,10 +58,10 @@ Server läuft auf: http://localhost:5173/
 - ✅ Energie-Indikator (rot bei <30% Energie)
 - ✅ Sozialverhalten (blaues Leuchten bei Gruppen)
 - ✅ Jagd-Mechanik (oranges Leuchten beim Jagen)
-- ✅ 3 Seiten: Simulation, Evolution, Einstellungen
-- ✅ React Router Navigation
+- ✅ 4 Seiten: Landing, Simulation, Evolution, Einstellungen
+- ✅ React Router Navigation mit basename für GitHub Pages
 - ✅ Zustand State Management mit Worker-Integration
-- ✅ Tailwind CSS Styling
+- ✅ Tailwind CSS Styling mit Gradients und Backdrop-Blur
 - ✅ Steuerungs-Panel (Play/Pause/Reset/Speed)
 - ✅ Live-Statistiken direkt aus Render-Daten
 - ✅ Farbige Legende für Populationen

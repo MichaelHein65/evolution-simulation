@@ -29,7 +29,7 @@ function AppContent() {
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Navigation - nur auf internen Seiten */}
       {showNavigation && (
-        <nav className="bg-gray-800 border-b border-gray-700">
+        <nav className="sticky top-0 z-50 bg-gray-800 border-b border-gray-700 shadow-lg">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16">
               <Link to="/" className="text-2xl font-bold text-blue-400 hover:text-blue-300 transition-colors">
@@ -80,7 +80,7 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
+    <Router basename="/evolution-simulation">
       <AppContent />
     </Router>
   );

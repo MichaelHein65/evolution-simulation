@@ -5,6 +5,32 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.2.0] - 2025-11-09
+
+### ✨ Neue Features
+- **Landing Page**: Professionelle Begrüßungsseite als neue Startseite
+  - Hero-Bereich mit animiertem Intro-GIF
+  - Gradient-Hintergrund (blau-lila-pink)
+  - Feature-Highlights in 3 Karten
+  - "Wie funktioniert es?" Erklärungssektion
+  - Footer mit Links zu GitHub und internen Seiten
+- **Sticky Navigation**: Navigationsleiste bleibt beim Scrollen sichtbar
+  - Landing Page: Kompakter Header mit Logo und "Starten" Button
+  - Interne Seiten: Vollständige Navigation mit allen Links
+  - Backdrop-Blur-Effekt für moderne Optik
+- **Optimiertes Routing**: 
+  - Landing Page auf `/`
+  - Simulation verschoben nach `/simulation`
+  - Worker-Initialisierung erst bei Bedarf (Performance-Optimierung)
+  - Basename für GitHub Pages korrekt konfiguriert
+
+### 🎨 Verbesserungen
+- Navigation nur auf internen Seiten sichtbar (cleanes Landing Page Design)
+- Responsive Design für alle Bildschirmgrößen
+- Verbesserte visuelle Hierarchie
+
+---
+
 ## [1.1.0] - 2025-11-09
 
 ### 🐛 Bugfixes

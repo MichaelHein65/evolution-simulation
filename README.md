@@ -5,10 +5,19 @@
 [![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.4-646cff.svg)](https://vitejs.dev/)
 [![Pixi.js](https://img.shields.io/badge/Pixi.js-8.5-ff6680.svg)](https://pixijs.com/)
+[![Version](https://img.shields.io/badge/Version-1.2.0-green.svg)](https://github.com/MichaelHein65/evolution-simulation)
 
 Eine hochperformante, interaktive Evolution-Simulation mit Web Worker Multi-Threading Architektur. Beobachte wie verschiedene Organismen-Populationen um Ressourcen konkurrieren, jagen, Schwärme bilden und sich entwickeln.
 
+🌐 **[Live Demo](https://michaelhein65.github.io/evolution-simulation/)**
+
 ## ✨ Hauptfeatures
+
+### 🎯 Landing Page
+- **Professionelle Begrüßungsseite** mit animiertem Intro
+- **Feature-Highlights** - Übersicht aller Funktionen
+- **Sticky Navigation** - Bleibt beim Scrollen sichtbar
+- **Responsive Design** - Optimiert für alle Bildschirmgrößen
 
 ### 🚀 Performance
 - **Web Worker Architektur** - Simulation läuft in separatem Thread (60 FPS auch bei 1000+ Organismen)
@@ -73,6 +82,11 @@ npm run start:fullscreen # Server + Safari im Fullscreen
 ```
 
 ## 🎮 Bedienung
+
+### Landing Page
+- 🚀 **Simulation starten** - Zur interaktiven Simulation
+- 📖 **Feature-Übersicht** - Alle Funktionen im Überblick
+- 🔗 **Quick Links** - Direkt zu Evolution-Grafiken oder Einstellungen
 
 ### Simulation-Seite
 - ▶️ **Play/Pause** - Simulation starten/stoppen

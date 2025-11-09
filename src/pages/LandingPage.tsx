@@ -3,13 +3,30 @@ import { Link } from 'react-router-dom';
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-blue-900 to-purple-900 text-white">
+      {/* Sticky Header Navigation */}
+      <nav className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-blue-500/20 shadow-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+              Evolution Simulation
+            </h1>
+            <Link 
+              to="/simulation"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
+            >
+              🚀 Starten
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 max-w-6xl">
         <div className="text-center space-y-8">
           {/* Title */}
-          <h1 className="text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+          <h2 className="text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
             Evolution Simulation
-          </h1>
+          </h2>
           
           <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
             Erlebe die Entstehung künstlichen Lebens in Echtzeit
