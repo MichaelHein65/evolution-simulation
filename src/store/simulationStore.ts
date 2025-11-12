@@ -148,6 +148,20 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
             break;
           }
           
+          // Validate: Check if totalOrganisms matches sum of populations
+          let sumOfPops = 0;
+          for (const popId in payload.populationCounts) {
+            sumOfPops += payload.populationCounts[popId];
+          }
+          if (sumOfPops !== payload.totalOrganisms) {
+            console.error(`❌ STATS MISMATCH at tick ${payload.tick}:`, {
+              totalOrganisms: payload.totalOrganisms,
+              sumOfPopulations: sumOfPops,
+              populationCounts: payload.populationCounts,
+              difference: payload.totalOrganisms - sumOfPops
+            });
+          }
+          
           const newStats: PopulationStats = {
             tick: payload.tick,
             populationCounts: payload.populationCounts,
