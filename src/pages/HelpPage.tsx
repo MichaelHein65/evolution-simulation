@@ -38,7 +38,19 @@ export default function HelpPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [wasRunning, setWasRunning] = useState(false);
-  const [totalTokensUsed, setTotalTokensUsed] = useState(0);
+  const [totalTokensUsed, setTotalTokensUsed] = useState(() => {
+    // Calculate total tokens from loaded messages
+    const saved = localStorage.getItem('ai-chat-history');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.reduce((sum: number, m: Message) => sum + (m.usage?.total_tokens || 0), 0);
+      } catch (e) {
+        return 0;
+      }
+    }
+    return 0;
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { running, pauseSimulation, startSimulation } = useSimulationStore();
@@ -211,7 +223,7 @@ WICHTIG:
 
       // Update total tokens used
       if (data.usage) {
-        setTotalTokensUsed(prev => prev + data.usage.total_tokens);
+        setTotalTokensUsed((prev: number) => prev + data.usage.total_tokens);
       }
 
       setMessages(prev => [...prev, aiMessage]);
@@ -265,27 +277,33 @@ WICHTIG:
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold flex items-center gap-3">
                 🤖 AI-Hilfe & Assistent
               </h1>
               <p className="text-blue-100 mt-2">
                 Frag mich alles über die Evolution Simulation!
               </p>
-              {totalTokensUsed > 0 && (
-                <p className="text-blue-200 text-sm mt-1">
-                  💰 Tokens verwendet: {totalTokensUsed.toLocaleString()} 
-                  {' '}(≈ ${(totalTokensUsed * 0.000005).toFixed(4)})
-                </p>
-              )}
             </div>
-            <button
-              onClick={clearChat}
-              className="bg-red-500/20 hover:bg-red-500/30 text-red-200 px-4 py-2 rounded-lg transition-colors text-sm border border-red-400/30"
-              title="Chat-Verlauf löschen"
-            >
-              🗑️ Chat löschen
-            </button>
+            <div className="flex flex-col items-end gap-2">
+              {totalTokensUsed > 0 && (
+                <div className="bg-blue-500/30 backdrop-blur-sm px-4 py-2 rounded-lg border border-blue-300/30">
+                  <p className="text-blue-100 text-sm font-medium">
+                    💰 Tokens: {totalTokensUsed.toLocaleString()}
+                  </p>
+                  <p className="text-blue-200 text-xs">
+                    ≈ ${(totalTokensUsed * 0.000005).toFixed(4)}
+                  </p>
+                </div>
+              )}
+              <button
+                onClick={clearChat}
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-200 px-4 py-2 rounded-lg transition-colors text-sm border border-red-400/30"
+                title="Chat-Verlauf löschen"
+              >
+                🗑️ Chat löschen
+              </button>
+            </div>
           </div>
         </div>
 
