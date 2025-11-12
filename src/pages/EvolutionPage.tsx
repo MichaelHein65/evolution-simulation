@@ -156,7 +156,7 @@ export default function EvolutionPage() {
     labels: statsHistory.map((stat) => stat.tick.toString()),
     datasets: [
       {
-        label: 'Gesamt Organismen (aus Stats)',
+        label: 'Gesamt Organismen',
         data: statsHistory.map((stat) => stat.totalOrganisms),
         borderColor: '#60a5fa',
         backgroundColor: '#60a5fa33',
@@ -165,25 +165,6 @@ export default function EvolutionPage() {
         fill: true,
         pointRadius: 0, // Keine Punkte anzeigen
         pointHoverRadius: 5, // Beim Hover Punkt zeigen
-      },
-      {
-        label: 'Summe aller Populationen (berechnet)',
-        data: statsHistory.map((stat) => {
-          // Berechne Summe aller Populationen
-          let sum = 0;
-          for (const popId in stat.populationCounts) {
-            sum += stat.populationCounts[popId] || 0;
-          }
-          return sum;
-        }),
-        borderColor: '#f97316',
-        backgroundColor: '#f9731633',
-        borderWidth: 2,
-        tension: 0.4,
-        fill: false,
-        borderDash: [5, 5], // Gestrichelte Linie zum Vergleich
-        pointRadius: 0, // Keine Punkte anzeigen
-        pointHoverRadius: 4, // Beim Hover kleiner Punkt
       },
     ],
   };
