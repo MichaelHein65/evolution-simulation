@@ -35,7 +35,7 @@ export default function HelpPage() {
   const [wasRunning, setWasRunning] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { populations, worldConfig, renderData, running, pauseSimulation, startSimulation } = useSimulationStore();
+  const { running, pauseSimulation, startSimulation } = useSimulationStore();
 
   // Save chat history to localStorage whenever messages change
   useEffect(() => {
@@ -69,7 +69,9 @@ export default function HelpPage() {
   }, [messages]);
 
   // Build system context from current game state
-  const buildSystemContext = () => {
+  const buildSystemContext = (state = useSimulationStore.getState()) => {
+    const { populations, worldConfig, renderData } = state;
+    
     const populationInfo = populations.map(pop => {
       const t = pop.defaultTraits;
       return `${pop.name} (${pop.color}): ${pop.initialCount} initial, Speed: ${t.speed.toFixed(1)}, Size: ${t.size}, MaxEnergy: ${t.maxEnergy}, Vision: ${t.visionRange}, Aggression: ${t.aggression.toFixed(1)}, Social: ${t.socialBehavior.toFixed(1)}, ReproductionRate: ${t.reproductionRate}, MaxAge: ${t.maxAge}`;
@@ -150,8 +152,8 @@ WICHTIG:
 `;
   };
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+    const sendMessage = async () => {
+    if (!input.trim()) return;
 
     const userMessage: Message = {
       role: 'user',
@@ -164,11 +166,18 @@ WICHTIG:
     setIsLoading(true);
 
     try {
-      // Only send messages after the initial greeting (skip first message)
-      const chatHistory = messages
-        .slice(1) // Skip the initial greeting
-        .map(m => ({ role: m.role, content: m.content }))
-        .concat([{ role: 'user', content: userMessage.content }]);
+      // Get fresh data from store right before sending
+      const currentState = useSimulationStore.getState();
+      const freshSystemContext = buildSystemContext(currentState);
+      
+      console.log('🔄 Aktuelle Simulations-Daten an AI gesendet:', {
+        organismen: currentState.renderData?.organisms.length || 0,
+        nahrung: currentState.renderData?.food.length || 0,
+        tick: currentState.tick
+      });
+      
+      // Don't send the initial greeting message
+      const chatHistory = messages.slice(1).concat(userMessage);
 
       const response = await fetch('http://localhost:3001/api/chat', {
         method: 'POST',
@@ -177,7 +186,7 @@ WICHTIG:
         },
         body: JSON.stringify({
           messages: chatHistory,
-          systemContext: buildSystemContext()
+          systemContext: freshSystemContext
         }),
       });
 
