@@ -5,6 +5,11 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
 }
 
 export default function HelpPage() {
@@ -33,6 +38,7 @@ export default function HelpPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [wasRunning, setWasRunning] = useState(false);
+  const [totalTokensUsed, setTotalTokensUsed] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { running, pauseSimulation, startSimulation } = useSimulationStore();
@@ -199,8 +205,14 @@ WICHTIG:
       const aiMessage: Message = {
         role: 'assistant',
         content: data.response,
-        timestamp: new Date()
+        timestamp: new Date(),
+        usage: data.usage // Token-Usage von OpenAI
       };
+
+      // Update total tokens used
+      if (data.usage) {
+        setTotalTokensUsed(prev => prev + data.usage.total_tokens);
+      }
 
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
@@ -260,6 +272,12 @@ WICHTIG:
               <p className="text-blue-100 mt-2">
                 Frag mich alles über die Evolution Simulation!
               </p>
+              {totalTokensUsed > 0 && (
+                <p className="text-blue-200 text-sm mt-1">
+                  💰 Tokens verwendet: {totalTokensUsed.toLocaleString()} 
+                  {' '}(≈ ${(totalTokensUsed * 0.000005).toFixed(4)})
+                </p>
+              )}
             </div>
             <button
               onClick={clearChat}
@@ -293,12 +311,20 @@ WICHTIG:
                     <p className="whitespace-pre-wrap leading-relaxed">
                       {message.content}
                     </p>
-                    <p className="text-xs opacity-50 mt-2">
-                      {message.timestamp.toLocaleTimeString('de-DE', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
-                    </p>
+                    <div className="flex items-center gap-3 text-xs opacity-50 mt-2">
+                      <span>
+                        {message.timestamp.toLocaleTimeString('de-DE', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </span>
+                      {message.usage && (
+                        <span className="text-blue-400">
+                          💰 {message.usage.total_tokens} tokens 
+                          (${(message.usage.total_tokens * 0.000005).toFixed(4)})
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
