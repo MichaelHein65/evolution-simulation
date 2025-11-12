@@ -49,6 +49,8 @@ export default function EvolutionPage() {
       borderWidth: 2,
       tension: 0.4,
       fill: false,
+      pointRadius: 0, // Keine Punkte anzeigen
+      pointHoverRadius: 4, // Beim Hover kleine Punkte
     })),
   };
 
@@ -161,6 +163,8 @@ export default function EvolutionPage() {
         borderWidth: 3,
         tension: 0.4,
         fill: true,
+        pointRadius: 0, // Keine Punkte anzeigen
+        pointHoverRadius: 5, // Beim Hover Punkt zeigen
       },
       {
         label: 'Summe aller Populationen (berechnet)',
@@ -178,6 +182,8 @@ export default function EvolutionPage() {
         tension: 0.4,
         fill: false,
         borderDash: [5, 5], // Gestrichelte Linie zum Vergleich
+        pointRadius: 0, // Keine Punkte anzeigen
+        pointHoverRadius: 4, // Beim Hover kleiner Punkt
       },
     ],
   };

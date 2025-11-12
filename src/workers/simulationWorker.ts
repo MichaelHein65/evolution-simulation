@@ -108,8 +108,8 @@ function simulationLoop() {
       }
     }
 
-    // Send stats every 50 ticks
-    if (stats.tick % 50 === 0) {
+    // Send stats every 10 ticks for more dynamic charts
+    if (stats.tick % 10 === 0) {
       self.postMessage({
         type: 'STATS',
         payload: {
