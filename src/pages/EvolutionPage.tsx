@@ -29,6 +29,15 @@ ChartJS.register(
 export default function EvolutionPage() {
   const { statsHistory, populations } = useSimulationStore();
 
+  // Debug: Prüfe ob totalOrganisms mit Summe der Populationen übereinstimmt
+  if (statsHistory.length > 0) {
+    const lastStat = statsHistory[statsHistory.length - 1];
+    const sumOfPops = Object.values(lastStat.populationCounts).reduce((a, b) => a + b, 0);
+    if (sumOfPops !== lastStat.totalOrganisms) {
+      console.warn(`⚠️ Diskrepanz gefunden! Total: ${lastStat.totalOrganisms}, Summe: ${sumOfPops}`, lastStat);
+    }
+  }
+
   // Prepare data for population chart
   const populationData = {
     labels: statsHistory.map((stat) => stat.tick.toString()),
@@ -135,13 +144,30 @@ export default function EvolutionPage() {
     labels: statsHistory.map((stat) => stat.tick.toString()),
     datasets: [
       {
-        label: 'Gesamt Organismen',
+        label: 'Gesamt Organismen (aus Stats)',
         data: statsHistory.map((stat) => stat.totalOrganisms),
         borderColor: '#60a5fa',
         backgroundColor: '#60a5fa33',
         borderWidth: 3,
         tension: 0.4,
         fill: true,
+      },
+      {
+        label: 'Summe aller Populationen (berechnet)',
+        data: statsHistory.map((stat) => {
+          // Berechne Summe aller Populationen
+          let sum = 0;
+          for (const popId in stat.populationCounts) {
+            sum += stat.populationCounts[popId] || 0;
+          }
+          return sum;
+        }),
+        borderColor: '#f97316',
+        backgroundColor: '#f9731633',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: false,
+        borderDash: [5, 5], // Gestrichelte Linie zum Vergleich
       },
     ],
   };
