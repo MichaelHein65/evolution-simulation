@@ -188,7 +188,7 @@ export default function SimulationCanvas2() {
   return (
     <div 
       ref={canvasRef} 
-      className="border-2 border-gray-700 rounded-lg overflow-hidden"
+      className="border-2 border-gray-700 rounded-lg overflow-hidden mx-auto"
       style={{ width: '1400px', height: '700px' }}
     />
   );

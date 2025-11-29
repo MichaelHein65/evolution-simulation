@@ -158,6 +158,84 @@ class AudioEngine {
   }
   
   /**
+   * Startet die Melodie einer einzelnen Population (für Button-Test)
+   */
+  startPopulationMelody(popId) {
+    if (!this.isEnabled || this.isMuted) return;
+    
+    const config = this.populationConfig[popId];
+    if (!config || !config.melody) return;
+    
+    // Falls bereits läuft, nicht nochmal starten
+    if (this.musicTracks[popId] && this.musicTracks[popId].isPlaying) return;
+    
+    // Track auf volle Lautstärke setzen
+    if (this.musicTracks[popId] && this.musicTracks[popId].gain) {
+      this.musicTracks[popId].gain.gain.setTargetAtTime(1, this.context.currentTime, 0.05);
+      this.musicTracks[popId].isPlaying = true;
+      this.musicTracks[popId].noteIndex = 0;
+    }
+    
+    // Melodie-Scheduler starten
+    this._startSingleMelodyScheduler(popId);
+  }
+  
+  /**
+   * Stoppt die Melodie einer einzelnen Population
+   */
+  stopPopulationMelody(popId) {
+    if (!this.musicTracks[popId]) return;
+    
+    // Scheduler stoppen
+    if (this.musicSchedulers[popId]) {
+      clearTimeout(this.musicSchedulers[popId]);
+      this.musicSchedulers[popId] = null;
+    }
+    
+    // Track ausblenden
+    if (this.musicTracks[popId].gain) {
+      this.musicTracks[popId].gain.gain.setTargetAtTime(0, this.context.currentTime, 0.1);
+    }
+    
+    this.musicTracks[popId].isPlaying = false;
+    this.musicTracks[popId].noteIndex = 0;
+  }
+  
+  /**
+   * Startet den Melodie-Scheduler für eine einzelne Population (ohne Mix)
+   */
+  _startSingleMelodyScheduler(popId) {
+    const config = this.populationConfig[popId];
+    if (!config || !config.melody) return;
+    
+    const melody = config.melody;
+    const track = this.musicTracks[popId];
+    
+    const scheduleNextNote = () => {
+      if (!track.isPlaying) return;
+      
+      const noteIndex = track.noteIndex;
+      const frequency = melody.notes[noteIndex];
+      const duration = melody.durations[noteIndex];
+      const beatsPerSecond = melody.tempo / 60;
+      const noteDuration = duration / beatsPerSecond;
+      
+      // Spiele die Note
+      this._playMelodyNote(popId, frequency, noteDuration, melody.waveform, melody.style);
+      
+      // Nächste Note Index (loop)
+      track.noteIndex = (noteIndex + 1) % melody.notes.length;
+      
+      // Schedule nächste Note
+      const nextNoteDelay = noteDuration * 1000;
+      this.musicSchedulers[popId] = setTimeout(scheduleNextNote, nextNoteDelay);
+    };
+    
+    // Sofort starten
+    scheduleNextNote();
+  }
+  
+  /**
    * Spielt den Basis-Sound einer Population ab
    */
   playPopulationSound(populationId) {

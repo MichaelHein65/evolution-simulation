@@ -1,6 +1,57 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { titleMelody } from '../audio/TitleMelody';
 
 export default function LandingPage() {
+  const [isMusicEnabled, setIsMusicEnabled] = useState(true);
+  const [isMusicStarted, setIsMusicStarted] = useState(false);
+  const hasStartedRef = useRef(false);
+
+  // Musik automatisch 5 Sekunden nach Start der App starten
+  useEffect(() => {
+    let delayTimeout: ReturnType<typeof setTimeout> | null = null;
+    let retryTimeout: ReturnType<typeof setTimeout> | null = null;
+    
+    const startMusic = async () => {
+      if (hasStartedRef.current) return;
+      
+      try {
+        const success = await titleMelody.init();
+        if (success) {
+          await titleMelody.start();
+          hasStartedRef.current = true;
+          setIsMusicStarted(true);
+        }
+      } catch (e) {
+        // Browser blockiert - bei nächster Interaktion versuchen
+        console.log('Autoplay blocked, waiting for interaction...');
+      }
+    };
+    
+    // Nach 5 Sekunden automatisch starten
+    delayTimeout = setTimeout(startMusic, 5000);
+
+    // Fade-out beim Verlassen der Seite
+    return () => {
+      if (delayTimeout) clearTimeout(delayTimeout);
+      if (retryTimeout) clearTimeout(retryTimeout);
+      if (hasStartedRef.current) {
+        titleMelody.fadeOut();
+      }
+    };
+  }, []);
+
+  // Toggle Musik an/aus
+  const toggleMusic = () => {
+    if (isMusicEnabled) {
+      titleMelody.fadeOut();
+      setIsMusicEnabled(false);
+    } else {
+      titleMelody.start();
+      setIsMusicEnabled(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-blue-900 to-purple-900 text-white">
       {/* Sticky Header Navigation */}
@@ -10,12 +61,26 @@ export default function LandingPage() {
             <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
               Evolution Simulation
             </h1>
-            <Link 
-              to="/simulation"
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
-            >
-              🚀 Starten
-            </Link>
+            <div className="flex items-center gap-4">
+              {/* Music Toggle */}
+              <button
+                onClick={toggleMusic}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  isMusicEnabled 
+                    ? 'bg-purple-600/30 text-purple-300 border border-purple-500/50' 
+                    : 'bg-gray-700/50 text-gray-400 hover:bg-purple-600/20 hover:text-purple-300 border border-gray-600/50'
+                }`}
+                title={isMusicEnabled ? 'Musik ausschalten' : 'Musik einschalten'}
+              >
+                {!isMusicStarted ? '🎵 Klick für Musik' : (isMusicEnabled ? '🎵 Musik an' : '🔇 Musik aus')}
+              </button>
+              <Link 
+                to="/simulation"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105"
+              >
+                🚀 Starten
+              </Link>
+            </div>
           </div>
         </div>
       </nav>

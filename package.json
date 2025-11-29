@@ -1,6 +1,6 @@
 {
   "name": "evolution-simulation",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "🧬 Hochperformante Evolution-Simulation mit Web Worker Multi-Threading, Pixi.js, React, AI-Hilfe und Audio Sonification",
   "author": "Michael Hein",
   "license": "MIT",

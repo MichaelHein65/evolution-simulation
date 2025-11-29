@@ -40,21 +40,27 @@ function AppContent() {
               <div className="flex space-x-4">
                 <Link
                   to="/simulation"
-                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors flex items-center gap-1"
                 >
-                  Simulation
+                  <span>🧬</span> Simulation
                 </Link>
                 <Link
                   to="/evolution"
-                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors flex items-center gap-1"
                 >
-                  Evolution
+                  <span>📈</span> Evolution
                 </Link>
                 <Link
                   to="/settings"
-                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors flex items-center gap-1"
                 >
-                  Einstellungen
+                  <span>⚙️</span> Einstellungen
+                </Link>
+                <Link
+                  to="/audio"
+                  className="px-4 py-2 rounded hover:bg-gray-700 transition-colors flex items-center gap-1"
+                >
+                  <span>🎵</span> Audio
                 </Link>
                 <Link
                   to="/help"
@@ -81,8 +87,8 @@ function AppContent() {
         } />
         <Route path="/evolution" element={<EvolutionPage />} />
         <Route path="/settings" element={<SettingsPage2 />} />
+        <Route path="/audio" element={<AudioSimulatorPage />} />
         <Route path="/help" element={<HelpPage />} />
-        <Route path="/audio-simulator" element={<AudioSimulatorPage />} />
       </Routes>
     </div>
   );

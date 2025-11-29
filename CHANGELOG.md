@@ -5,6 +5,44 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.5.0] - 2025-11-29
+
+### 🎵 Title Melody & Audio Improvements
+- **Titelmelodie**: Mysteriöse Harry-Potter-inspirierte Musik auf der Landing Page
+  - E-Moll Tonart mit charakteristischen Intervallen
+  - Hauptmelodie mit Vibrato
+  - Tiefe Bass-Bordun-Töne für atmosphärische Tiefe
+  - Hohe Glitzer-Töne (Celesta-artig) für magisches Funkeln
+  - Hall/Reverb für räumlichen Klang
+- **Auto-Start**: Musik startet automatisch 5 Sekunden nach Seitenaufruf
+- **Fade-In/Out**: Langsames Einblenden (2s) und Nachklingen beim Verlassen (3s)
+- **Musik-Toggle**: Button zum Ein-/Ausschalten der Titelmelodie
+
+### 🎨 UI-Verbesserungen
+- **Navigation Icons**: Alle Nav-Links haben jetzt Emojis
+  - 🧬 Simulation
+  - 📈 Evolution
+  - ⚙️ Einstellungen
+  - 🎵 Audio
+  - 🤖 Hilfe
+- **Audio in Navigation**: Audio Simulator als eigene Seite unter `/audio`
+- **Audio Simulator verbessert**: 
+  - Population-Buttons spielen jetzt Melodien (Press & Hold)
+  - Untertitel zeigen Melodie-Beschreibung statt Frequenz
+  - Entfernt: Sound-Parameter (keine Wirkung) und Preset-Export
+  - Entfernt: Simulations-Modus (redundant)
+
+### 🐛 Bugfixes
+- **Audio Controls**: "Musik an/aus" Button funktioniert jetzt zuverlässig
+- **Canvas-Größe**: Simulationsfeld wieder korrekt auf 1400x700px zentriert
+
+### 🛠️ Technisch
+- Neue Datei: `/src/audio/TitleMelody.ts` - Titelmelodie-Engine
+- Route geändert: `/audio-simulator` → `/audio`
+- AudioControls: Verbesserte Mute/Unmute-Logik
+
+---
+
 ## [1.4.0] - 2025-11-09
 
 ### 🎵 Audio Sonification
@@ -177,6 +215,7 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - Chart.js 4.4 + chartjs-plugin-zoom
 - Tailwind CSS
 
+[1.5.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.2.0...v1.3.0

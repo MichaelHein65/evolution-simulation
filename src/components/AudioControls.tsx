@@ -41,8 +41,14 @@ export const AudioControls = () => {
   };
 
   const handleMuteToggle = () => {
-    toggleMute();
-    setIsMuted(!isMuted);
+    const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+    audioEngine.setMuted(newMutedState);
+    
+    // Wenn gemutet wird und Musik läuft, stoppe sie auch im Store
+    if (newMutedState && musicPlaying) {
+      stopMusic();
+    }
   };
 
   const handleMasterVolChange = (value: number) => {
@@ -58,6 +64,20 @@ export const AudioControls = () => {
   const handleEventVolChange = (value: number) => {
     setEventVol(value);
     setEventVolume(value / 100);
+  };
+
+  // Musik stoppen Handler - stoppt Musik UND setzt muted
+  const handleStopMusic = () => {
+    stopMusic();
+    audioEngine.setMuted(true);
+    setIsMuted(true);
+  };
+
+  // Musik starten Handler - startet Musik UND unmuted
+  const handleStartMusic = () => {
+    audioEngine.setMuted(false);
+    setIsMuted(false);
+    startMusic();
   };
 
   // Auto-start music when simulation starts (if audio enabled)
@@ -135,15 +155,14 @@ export const AudioControls = () => {
           {/* Music Controls */}
           <div className="flex gap-2">
             <button
-              onClick={() => musicPlaying ? stopMusic() : startMusic()}
-              disabled={isMuted}
+              onClick={() => (musicPlaying && !isMuted) ? handleStopMusic() : handleStartMusic()}
               className={`flex-1 px-3 py-2 rounded-lg font-medium transition-all ${
-                musicPlaying
+                musicPlaying && !isMuted
                   ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30'
                   : 'bg-green-600/20 text-green-400 hover:bg-green-600/30'
-              } ${isMuted ? 'opacity-50 cursor-not-allowed' : ''}`}
+              }`}
             >
-              {musicPlaying ? '⏹️ Musik stoppen' : '▶️ Musik starten'}
+              {musicPlaying && !isMuted ? '⏹️ Musik aus' : '▶️ Musik an'}
             </button>
           </div>
 
@@ -205,7 +224,7 @@ export const AudioControls = () => {
 
           {/* Link to Audio Simulator */}
           <Link
-            to="/audio-simulator"
+            to="/audio"
             className="flex items-center justify-center gap-2 w-full px-3 py-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 rounded-lg transition-colors text-sm font-medium"
           >
             <span>🎛️</span>

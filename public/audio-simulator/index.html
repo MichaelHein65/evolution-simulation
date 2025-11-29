@@ -120,32 +120,32 @@
       <!-- Population Sound Test -->
       <section class="control-section">
         <h2>🧬 Populationen</h2>
-        <p class="section-hint">Klicke auf eine Population, um ihren Basis-Sound zu hören</p>
+        <p class="section-hint">Halte eine Taste gedrückt, um die Melodie zu hören</p>
         <div class="population-grid">
           <button class="population-btn" data-population="sprinter" style="--pop-color: #EF4444">
             <span class="pop-icon">🏃</span>
             <span class="pop-name">Sprinter</span>
-            <span class="pop-freq">523 Hz · Sawtooth</span>
+            <span class="pop-freq">Schnell & hektisch (Staccato)</span>
           </button>
           <button class="population-btn" data-population="tank" style="--pop-color: #3B82F6">
             <span class="pop-icon">🛡️</span>
             <span class="pop-name">Tank</span>
-            <span class="pop-freq">220 Hz · Sine</span>
+            <span class="pop-freq">Langsam & majestätisch (Legato)</span>
           </button>
           <button class="population-btn" data-population="hunter" style="--pop-color: #F97316">
             <span class="pop-icon">🎯</span>
             <span class="pop-name">Jäger</span>
-            <span class="pop-freq">392 Hz · Square</span>
+            <span class="pop-freq">Aggressiv & spannend (Moll)</span>
           </button>
           <button class="population-btn" data-population="gatherer" style="--pop-color: #10B981">
             <span class="pop-icon">🌿</span>
             <span class="pop-name">Sammler</span>
-            <span class="pop-freq">330 Hz · Triangle</span>
+            <span class="pop-freq">Friedlich & sanft (Pentatonik)</span>
           </button>
           <button class="population-btn" data-population="allrounder" style="--pop-color: #A855F7">
             <span class="pop-icon">⚖️</span>
             <span class="pop-name">Allrounder</span>
-            <span class="pop-freq">440 Hz · Sine</span>
+            <span class="pop-freq">Ausgewogen & neutral</span>
           </button>
         </div>
       </section>
@@ -188,85 +188,6 @@
             <span class="event-desc">100ms · Percussiv</span>
           </button>
         </div>
-      </section>
-
-      <!-- Sound Parameters -->
-      <section class="control-section">
-        <h2>🎛️ Sound-Parameter</h2>
-        <p class="section-hint">Passe die Klangparameter in Echtzeit an</p>
-
-        <div class="params-grid">
-          <!-- Base Sound -->
-          <div class="param-group">
-            <h3>Basis-Sound</h3>
-            <div class="control-row">
-              <label>Frequenz-Multiplikator</label>
-              <input type="range" id="freq-mult" min="0.5" max="2" step="0.1" value="1">
-              <span id="freq-mult-value">1.0x</span>
-            </div>
-            <div class="control-row">
-              <label>Attack (ms)</label>
-              <input type="range" id="attack" min="1" max="100" value="10">
-              <span id="attack-value">10ms</span>
-            </div>
-            <div class="control-row">
-              <label>Decay (ms)</label>
-              <input type="range" id="decay" min="10" max="500" value="100">
-              <span id="decay-value">100ms</span>
-            </div>
-          </div>
-
-          <!-- Event Sounds -->
-          <div class="param-group">
-            <h3>Event-Modifikation</h3>
-            <div class="control-row">
-              <label>Event Volume</label>
-              <input type="range" id="event-volume" min="0" max="100" value="70">
-              <span id="event-volume-value">70%</span>
-            </div>
-            <div class="control-row">
-              <label>Pitch-Shift (Semitones)</label>
-              <input type="range" id="pitch-shift" min="-12" max="12" value="0">
-              <span id="pitch-shift-value">0</span>
-            </div>
-            <div class="control-row">
-              <label>Detune (Cents)</label>
-              <input type="range" id="detune" min="-100" max="100" value="0">
-              <span id="detune-value">0</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Simulation Mode -->
-      <section class="control-section">
-        <h2>🎬 Simulations-Modus</h2>
-        <p class="section-hint">Simuliere zufällige Ereignisse wie in der echten Simulation</p>
-        
-        <div class="control-row">
-          <label>Events pro Sekunde</label>
-          <input type="range" id="events-per-second" min="1" max="30" value="5">
-          <span id="events-per-second-value">5/s</span>
-        </div>
-
-        <div class="simulation-controls">
-          <button id="start-simulation" class="btn btn-success">▶️ Simulation starten</button>
-          <button id="stop-simulation" class="btn btn-danger" disabled>⏹️ Stoppen</button>
-        </div>
-
-        <div id="simulation-log" class="simulation-log">
-          <p class="log-hint">Ereignis-Log erscheint hier...</p>
-        </div>
-      </section>
-
-      <!-- Preset Export -->
-      <section class="control-section">
-        <h2>💾 Presets</h2>
-        <div class="preset-controls">
-          <button id="export-preset" class="btn btn-secondary">📤 Einstellungen exportieren</button>
-          <button id="reset-defaults" class="btn btn-secondary">🔄 Zurücksetzen</button>
-        </div>
-        <pre id="preset-output" class="preset-output"></pre>
       </section>
 
     </div>

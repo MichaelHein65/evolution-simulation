@@ -23,7 +23,7 @@
 - **Audio**: Web Audio API (Synthesizer)
 
 ## Current Status
-✅ Version 1.4.0 - Audio Sonification
+✅ Version 1.5.0 - Title Melody & UI Improvements
 
 **Live Demo**: https://michaelhein65.github.io/evolution-simulation/
 **Lokal**: http://localhost:5173/evolution-simulation/
@@ -39,6 +39,7 @@
 
 🎵 **Audio-System**:
 - **AudioEngine**: Web Audio API basierte Synthesizer
+- **TitleMelody**: Mysteriöse Harry-Potter-inspirierte Titelmelodie
 - **Event-Sounds**: Nahrung essen, Geburt, Tod, Jagd-Kill
 - **Hintergrundmusik**: 5 Melodien (eine pro Population)
 - **Dynamischer Mix**: Musik-Lautstärke basiert auf Populationsanteilen
@@ -46,6 +47,13 @@
 - **Audio Simulator**: Standalone-Tool zum Testen der Sounds
 
 ## Implementierte Features
+- ✅ **Titelmelodie** - Mysteriöse Harry-Potter-inspirierte Musik auf Landing Page
+- ✅ **Auto-Start Musik** - Startet 5s nach Seitenaufruf mit langsamem Einblenden
+- ✅ **Fade-Out** - Musik klingt 3s nach beim Verlassen der Seite
+- ✅ **Navigation Icons** - Alle Nav-Links haben jetzt Emojis (🧬📈⚙️🎵🤖)
+- ✅ **Audio in Navigation** - Audio Simulator als eigene Seite unter /audio
+- ✅ **Audio Simulator verbessert** - Population-Buttons spielen Melodien (Press & Hold)
+- ✅ **Audio Controls Fix** - Musik an/aus Button funktioniert zuverlässig
 - ✅ **Audio Sonification** - Synthesierte Sounds für alle Events
 - ✅ **Dynamische Hintergrundmusik** - 5 Melodien, Mix nach Populationsverteilung
 - ✅ **Audio Controls UI** - Volume-Slider, Mute, Musik Start/Stop
