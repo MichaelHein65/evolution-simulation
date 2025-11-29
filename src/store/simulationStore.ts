@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 import type { Population, WorldConfig, PopulationStats } from '../types';
 import { DEFAULT_POPULATIONS, DEFAULT_WORLD_CONFIG } from '../utils/constants';
+import { audioEngine, SimulationEvents } from '../audio/AudioEngine';
 
 // Import worker - Vite will handle this special syntax
 // @ts-ignore
@@ -69,6 +70,10 @@ interface SimulationStore {
   worldConfig: WorldConfig;
   statsHistory: PopulationStats[];
   
+  // Audio state
+  audioEnabled: boolean;
+  musicPlaying: boolean;
+  
   // Render data received from worker
   renderData: {
     organisms: Array<{
@@ -98,6 +103,15 @@ interface SimulationStore {
   updatePopulation: (populationId: string, updates: Partial<Population>) => void;
   updateWorldConfig: (updates: Partial<WorldConfig>) => void;
   resetToDefaults: () => void;
+  
+  // Audio actions
+  enableAudio: () => Promise<boolean>;
+  toggleMute: () => void;
+  startMusic: () => void;
+  stopMusic: () => void;
+  setMasterVolume: (value: number) => void;
+  setMusicVolume: (value: number) => void;
+  setEventVolume: (value: number) => void;
 }
 
 export const useSimulationStore = create<SimulationStore>((set, get) => ({
@@ -110,6 +124,10 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
   worldConfig: loadWorldConfig(),
   statsHistory: [],
   renderData: null,
+  
+  // Audio state
+  audioEnabled: false,
+  musicPlaying: false,
 
   // Initialize simulation and worker
   initializeSimulation: () => {
@@ -137,6 +155,13 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
           
         case 'RENDER_DATA':
           set({ renderData: payload });
+          break;
+          
+        case 'EVENTS':
+          // Process audio events
+          if (get().audioEnabled) {
+            audioEngine.processEvents(payload as SimulationEvents);
+          }
           break;
           
         case 'STATS':
@@ -168,6 +193,12 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
             averageTraits: {},
             totalOrganisms: payload.totalOrganisms,
           };
+          
+          // Update audio engine with population shares for dynamic music mix
+          if (get().audioEnabled) {
+            audioEngine.updatePopulationSharesFromCounts(payload.populationCounts);
+          }
+          
           set({
             tick: payload.tick,
             statsHistory: [...statsHistory.slice(-200), newStats],
@@ -309,5 +340,51 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
         payload: { config: DEFAULT_WORLD_CONFIG },
       });
     }
+  },
+  
+  // Audio actions
+  enableAudio: async () => {
+    const success = await audioEngine.enable();
+    if (success) {
+      set({ audioEnabled: true });
+    }
+    return success;
+  },
+  
+  toggleMute: () => {
+    const { audioEnabled, musicPlaying } = get();
+    if (!audioEnabled) return;
+    
+    const currentlyMuted = audioEngine.getIsMuted();
+    audioEngine.setMuted(!currentlyMuted);
+    
+    if (!currentlyMuted && musicPlaying) {
+      set({ musicPlaying: false });
+    }
+  },
+  
+  startMusic: () => {
+    const { audioEnabled } = get();
+    if (!audioEnabled) return;
+    
+    audioEngine.startMusic();
+    set({ musicPlaying: true });
+  },
+  
+  stopMusic: () => {
+    audioEngine.stopMusic();
+    set({ musicPlaying: false });
+  },
+  
+  setMasterVolume: (value: number) => {
+    audioEngine.setMasterVolume(value);
+  },
+  
+  setMusicVolume: (value: number) => {
+    audioEngine.setMusicVolume(value);
+  },
+  
+  setEventVolume: (value: number) => {
+    audioEngine.setEventVolume(value);
   },
 }));

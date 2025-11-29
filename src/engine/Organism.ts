@@ -19,6 +19,9 @@ export class OrganismClass implements Organism {
   isHunting: boolean = false;
   lastSocialUpdate: number = 0;
   lastHuntUpdate: number = 0;
+  
+  // Kill tracking for audio events
+  lastKillVictimId: string | null = null;
 
   constructor(
     id: string,
@@ -252,6 +255,8 @@ export class OrganismClass implements Organism {
     // Gain energy from successful attack
     if (target.energy <= 0) {
       target.alive = false;
+      // Track the kill for audio events
+      this.lastKillVictimId = target.id;
       // Absorb 30% of target's max energy
       this.energy = Math.min(
         this.energy + target.traits.maxEnergy * 0.3,

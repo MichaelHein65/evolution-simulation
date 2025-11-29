@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evolution Audio Simulator</title>
+  <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎵 Evolution Audio Simulator</h1>
+      <p class="subtitle">Teste und optimiere die Sounds für die Evolution-Simulation</p>
+    </header>
+
+    <!-- Audio Status -->
+    <div id="audio-status" class="audio-status">
+      <button id="enable-audio" class="btn btn-primary btn-large">
+        🔊 Audio aktivieren
+      </button>
+      <p class="hint">Browser erfordern eine Benutzerinteraktion, bevor Audio abgespielt werden kann</p>
+    </div>
+
+    <!-- Main Controls (hidden until audio enabled) -->
+    <div id="main-controls" class="main-controls hidden">
+      
+      <!-- Master Volume -->
+      <section class="control-section">
+        <h2>🎚️ Master Controls</h2>
+        <div class="control-row">
+          <label>Master Volume</label>
+          <input type="range" id="master-volume" min="0" max="100" value="50">
+          <span id="master-volume-value">50%</span>
+        </div>
+        <div class="control-row">
+          <label>Musik Volume</label>
+          <input type="range" id="music-volume" min="0" max="100" value="40">
+          <span id="music-volume-value">40%</span>
+        </div>
+        <div class="control-row">
+          <label>Mute</label>
+          <button id="mute-btn" class="btn btn-secondary">🔊 Sound An</button>
+        </div>
+      </section>
+
+      <!-- Background Music -->
+      <section class="control-section">
+        <h2>🎼 Hintergrundmusik</h2>
+        <p class="section-hint">Jede Population hat ihre eigene Melodie. Passe die Anteile an, um den Mix zu verändern.</p>
+        
+        <div class="music-controls">
+          <button id="start-music" class="btn btn-success">▶️ Musik starten</button>
+          <button id="stop-music" class="btn btn-danger" disabled>⏹️ Musik stoppen</button>
+        </div>
+
+        <div class="population-sliders">
+          <div class="pop-slider" style="--pop-color: #EF4444">
+            <div class="pop-slider-header">
+              <span class="pop-icon">🏃</span>
+              <span class="pop-name">Sprinter</span>
+              <span class="pop-value" id="share-sprinter-value">20%</span>
+            </div>
+            <input type="range" id="share-sprinter" data-population="sprinter" min="0" max="100" value="20" class="pop-range">
+            <p class="pop-desc">Schnell & hektisch (Staccato)</p>
+          </div>
+          
+          <div class="pop-slider" style="--pop-color: #3B82F6">
+            <div class="pop-slider-header">
+              <span class="pop-icon">🛡️</span>
+              <span class="pop-name">Tank</span>
+              <span class="pop-value" id="share-tank-value">20%</span>
+            </div>
+            <input type="range" id="share-tank" data-population="tank" min="0" max="100" value="20" class="pop-range">
+            <p class="pop-desc">Langsam & majestätisch (Legato)</p>
+          </div>
+          
+          <div class="pop-slider" style="--pop-color: #F97316">
+            <div class="pop-slider-header">
+              <span class="pop-icon">🎯</span>
+              <span class="pop-name">Jäger</span>
+              <span class="pop-value" id="share-hunter-value">20%</span>
+            </div>
+            <input type="range" id="share-hunter" data-population="hunter" min="0" max="100" value="20" class="pop-range">
+            <p class="pop-desc">Aggressiv & spannend (Moll)</p>
+          </div>
+          
+          <div class="pop-slider" style="--pop-color: #10B981">
+            <div class="pop-slider-header">
+              <span class="pop-icon">🌿</span>
+              <span class="pop-name">Sammler</span>
+              <span class="pop-value" id="share-gatherer-value">20%</span>
+            </div>
+            <input type="range" id="share-gatherer" data-population="gatherer" min="0" max="100" value="20" class="pop-range">
+            <p class="pop-desc">Friedlich & sanft (Pentatonik)</p>
+          </div>
+          
+          <div class="pop-slider" style="--pop-color: #A855F7">
+            <div class="pop-slider-header">
+              <span class="pop-icon">⚖️</span>
+              <span class="pop-name">Allrounder</span>
+              <span class="pop-value" id="share-allrounder-value">20%</span>
+            </div>
+            <input type="range" id="share-allrounder" data-population="allrounder" min="0" max="100" value="20" class="pop-range">
+            <p class="pop-desc">Ausgewogen & neutral</p>
+          </div>
+        </div>
+
+        <div class="mix-visualization">
+          <div class="mix-bar">
+            <div class="mix-segment" id="mix-sprinter" style="--pop-color: #EF4444; width: 20%"></div>
+            <div class="mix-segment" id="mix-tank" style="--pop-color: #3B82F6; width: 20%"></div>
+            <div class="mix-segment" id="mix-hunter" style="--pop-color: #F97316; width: 20%"></div>
+            <div class="mix-segment" id="mix-gatherer" style="--pop-color: #10B981; width: 20%"></div>
+            <div class="mix-segment" id="mix-allrounder" style="--pop-color: #A855F7; width: 20%"></div>
+          </div>
+          <p class="mix-label">Musik-Mix Visualisierung</p>
+        </div>
+      </section>
+
+      <!-- Population Sound Test -->
+      <section class="control-section">
+        <h2>🧬 Populationen</h2>
+        <p class="section-hint">Klicke auf eine Population, um ihren Basis-Sound zu hören</p>
+        <div class="population-grid">
+          <button class="population-btn" data-population="sprinter" style="--pop-color: #EF4444">
+            <span class="pop-icon">🏃</span>
+            <span class="pop-name">Sprinter</span>
+            <span class="pop-freq">523 Hz · Sawtooth</span>
+          </button>
+          <button class="population-btn" data-population="tank" style="--pop-color: #3B82F6">
+            <span class="pop-icon">🛡️</span>
+            <span class="pop-name">Tank</span>
+            <span class="pop-freq">220 Hz · Sine</span>
+          </button>
+          <button class="population-btn" data-population="hunter" style="--pop-color: #F97316">
+            <span class="pop-icon">🎯</span>
+            <span class="pop-name">Jäger</span>
+            <span class="pop-freq">392 Hz · Square</span>
+          </button>
+          <button class="population-btn" data-population="gatherer" style="--pop-color: #10B981">
+            <span class="pop-icon">🌿</span>
+            <span class="pop-name">Sammler</span>
+            <span class="pop-freq">330 Hz · Triangle</span>
+          </button>
+          <button class="population-btn" data-population="allrounder" style="--pop-color: #A855F7">
+            <span class="pop-icon">⚖️</span>
+            <span class="pop-name">Allrounder</span>
+            <span class="pop-freq">440 Hz · Sine</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Event Sound Test -->
+      <section class="control-section">
+        <h2>⚡ Ereignisse</h2>
+        <p class="section-hint">Wähle eine Population und klicke auf ein Ereignis</p>
+        
+        <div class="control-row">
+          <label>Aktive Population</label>
+          <select id="active-population">
+            <option value="sprinter">🏃 Sprinter</option>
+            <option value="tank">🛡️ Tank</option>
+            <option value="hunter">🎯 Jäger</option>
+            <option value="gatherer">🌿 Sammler</option>
+            <option value="allrounder">⚖️ Allrounder</option>
+          </select>
+        </div>
+
+        <div class="event-grid">
+          <button class="event-btn" data-event="eat">
+            <span class="event-icon">🍎</span>
+            <span class="event-name">Nahrung essen</span>
+            <span class="event-desc">50ms · +200Hz Blip</span>
+          </button>
+          <button class="event-btn" data-event="birth">
+            <span class="event-icon">🐣</span>
+            <span class="event-name">Geburt</span>
+            <span class="event-desc">150ms · Aufsteigend</span>
+          </button>
+          <button class="event-btn" data-event="death">
+            <span class="event-icon">💀</span>
+            <span class="event-name">Tod</span>
+            <span class="event-desc">200ms · Absteigend</span>
+          </button>
+          <button class="event-btn" data-event="kill">
+            <span class="event-icon">⚔️</span>
+            <span class="event-name">Jagd-Kill</span>
+            <span class="event-desc">100ms · Percussiv</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Sound Parameters -->
+      <section class="control-section">
+        <h2>🎛️ Sound-Parameter</h2>
+        <p class="section-hint">Passe die Klangparameter in Echtzeit an</p>
+
+        <div class="params-grid">
+          <!-- Base Sound -->
+          <div class="param-group">
+            <h3>Basis-Sound</h3>
+            <div class="control-row">
+              <label>Frequenz-Multiplikator</label>
+              <input type="range" id="freq-mult" min="0.5" max="2" step="0.1" value="1">
+              <span id="freq-mult-value">1.0x</span>
+            </div>
+            <div class="control-row">
+              <label>Attack (ms)</label>
+              <input type="range" id="attack" min="1" max="100" value="10">
+              <span id="attack-value">10ms</span>
+            </div>
+            <div class="control-row">
+              <label>Decay (ms)</label>
+              <input type="range" id="decay" min="10" max="500" value="100">
+              <span id="decay-value">100ms</span>
+            </div>
+          </div>
+
+          <!-- Event Sounds -->
+          <div class="param-group">
+            <h3>Event-Modifikation</h3>
+            <div class="control-row">
+              <label>Event Volume</label>
+              <input type="range" id="event-volume" min="0" max="100" value="70">
+              <span id="event-volume-value">70%</span>
+            </div>
+            <div class="control-row">
+              <label>Pitch-Shift (Semitones)</label>
+              <input type="range" id="pitch-shift" min="-12" max="12" value="0">
+              <span id="pitch-shift-value">0</span>
+            </div>
+            <div class="control-row">
+              <label>Detune (Cents)</label>
+              <input type="range" id="detune" min="-100" max="100" value="0">
+              <span id="detune-value">0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Simulation Mode -->
+      <section class="control-section">
+        <h2>🎬 Simulations-Modus</h2>
+        <p class="section-hint">Simuliere zufällige Ereignisse wie in der echten Simulation</p>
+        
+        <div class="control-row">
+          <label>Events pro Sekunde</label>
+          <input type="range" id="events-per-second" min="1" max="30" value="5">
+          <span id="events-per-second-value">5/s</span>
+        </div>
+
+        <div class="simulation-controls">
+          <button id="start-simulation" class="btn btn-success">▶️ Simulation starten</button>
+          <button id="stop-simulation" class="btn btn-danger" disabled>⏹️ Stoppen</button>
+        </div>
+
+        <div id="simulation-log" class="simulation-log">
+          <p class="log-hint">Ereignis-Log erscheint hier...</p>
+        </div>
+      </section>
+
+      <!-- Preset Export -->
+      <section class="control-section">
+        <h2>💾 Presets</h2>
+        <div class="preset-controls">
+          <button id="export-preset" class="btn btn-secondary">📤 Einstellungen exportieren</button>
+          <button id="reset-defaults" class="btn btn-secondary">🔄 Zurücksetzen</button>
+        </div>
+        <pre id="preset-output" class="preset-output"></pre>
+      </section>
+
+    </div>
+
+    <footer>
+      <p>Evolution Simulation Audio Test Tool · v1.0</p>
+    </footer>
+  </div>
+
+  <script src="audio-engine.js?v=2"></script>
+  <script src="app.js?v=2"></script>
+</body>
+</html>

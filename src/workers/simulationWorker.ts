@@ -11,6 +11,21 @@ let speedMultiplier = 1;
 let tickCounter = 0;
 let renderFrameCounter = 0;
 
+// Event tracking for audio
+interface SimulationEvents {
+  foodEaten: Array<{ populationId: string; x: number }>;
+  births: Array<{ populationId: string; x: number }>;
+  deaths: Array<{ populationId: string; x: number }>;
+  kills: Array<{ attackerId: string; victimId: string; x: number }>;
+}
+
+let currentTickEvents: SimulationEvents = {
+  foodEaten: [],
+  births: [],
+  deaths: [],
+  kills: []
+};
+
 // Message types
 export interface WorkerMessage {
   type: 'INIT' | 'START' | 'STOP' | 'RESET' | 'SET_SPEED' | 'UPDATE_POPULATIONS' | 'UPDATE_WORLD_CONFIG';
@@ -18,7 +33,7 @@ export interface WorkerMessage {
 }
 
 export interface WorkerResponse {
-  type: 'STATS' | 'RENDER_DATA' | 'INITIALIZED' | 'ERROR';
+  type: 'STATS' | 'RENDER_DATA' | 'INITIALIZED' | 'ERROR' | 'EVENTS';
   payload?: any;
 }
 
@@ -61,11 +76,51 @@ function simulationLoop() {
   try {
     const startTime = performance.now();
     
+    // Reset events for this tick
+    currentTickEvents = {
+      foodEaten: [],
+      births: [],
+      deaths: [],
+      kills: []
+    };
+    
+    // Track organisms before update for death detection
+    const organismsBeforeUpdate = new Set(world.organisms.filter(o => o.alive).map(o => o.id));
+    const organismCountBefore = world.organisms.length;
+    
     // Update simulation
     const updateStart = performance.now();
     world.update();
     const updateTime = performance.now() - updateStart;
     tickCounter++;
+    
+    // Detect deaths (organisms that were alive before but not after)
+    for (const org of world.organisms) {
+      if (!org.alive && organismsBeforeUpdate.has(org.id)) {
+        currentTickEvents.deaths.push({
+          populationId: org.populationId,
+          x: org.x
+        });
+      }
+    }
+    
+    // Detect births (new organisms)
+    if (world.organisms.length > organismCountBefore) {
+      const newCount = world.organisms.length - organismCountBefore;
+      // Get the last N organisms (the new ones)
+      const newOrganisms = world.organisms.slice(-newCount);
+      for (const org of newOrganisms) {
+        currentTickEvents.births.push({
+          populationId: org.populationId,
+          x: org.x
+        });
+      }
+    }
+    
+    // Get events from World (food eaten, kills)
+    const worldEvents = world.getAndClearEvents();
+    currentTickEvents.foodEaten = worldEvents.foodEaten;
+    currentTickEvents.kills = worldEvents.kills;
 
     const stats = world.getStats();
 
@@ -106,6 +161,17 @@ function simulationLoop() {
       if (tickCounter % 60 === 0) {
         console.log(`[Worker] Tick ${tickCounter}: Total=${totalTime.toFixed(2)}ms (update=${updateTime.toFixed(2)}ms, map=${mapTime.toFixed(2)}ms, post=${postTime.toFixed(2)}ms) | Organisms=${world.organisms.length}, Food=${world.food.length}`);
       }
+    }
+    
+    // Send events for audio (every frame for responsiveness)
+    if (currentTickEvents.foodEaten.length > 0 || 
+        currentTickEvents.births.length > 0 || 
+        currentTickEvents.deaths.length > 0 || 
+        currentTickEvents.kills.length > 0) {
+      self.postMessage({
+        type: 'EVENTS',
+        payload: currentTickEvents
+      } as WorkerResponse);
     }
 
     // Send stats every 10 ticks for more dynamic charts

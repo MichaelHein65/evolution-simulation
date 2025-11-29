@@ -7,6 +7,7 @@ import SimulationPage from './pages/SimulationPage';
 import EvolutionPage from './pages/EvolutionPage';
 import SettingsPage2 from './pages/SettingsPage2';
 import HelpPage from './pages/HelpPage';
+import AudioSimulatorPage from './pages/AudioSimulatorPage';
 import './index.css';
 
 function AppContent() {
@@ -81,6 +82,7 @@ function AppContent() {
         <Route path="/evolution" element={<EvolutionPage />} />
         <Route path="/settings" element={<SettingsPage2 />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/audio-simulator" element={<AudioSimulatorPage />} />
       </Routes>
     </div>
   );

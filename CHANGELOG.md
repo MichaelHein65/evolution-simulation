@@ -5,6 +5,50 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.4.0] - 2025-11-09
+
+### 🎵 Audio Sonification
+- **Event-Sounds**: Synthesierte Sounds für alle Simulation-Ereignisse
+  - **Nahrung essen** (50ms): Kurzer hoher Blip mit +200Hz Frequenzanstieg
+  - **Geburt** (150ms): Aufsteigender Sweep über eine Oktave
+  - **Tod** (200ms): Absteigender Sweep über eine Oktave
+  - **Jagd-Kill** (100ms): Percussiver Impact mit Noise-Burst
+- **Hintergrundmusik**: 5 einzigartige Melodien - eine pro Population
+  - **Sprinter**: 523 Hz (C5), Sawtooth, schnell & staccato
+  - **Tank**: 220 Hz (A3), Sine, langsam & legato
+  - **Jäger**: 392 Hz (G4), Square, aggressiv & Moll
+  - **Sammler**: 330 Hz (E4), Triangle, sanft & pentatonisch
+  - **Allrounder**: 440 Hz (A4), Sine, ausgewogen
+- **Dynamischer Mix**: Musik-Lautstärke basiert auf Populationsanteilen
+- **Stereo-Panning**: Sounds links/rechts je nach X-Position im Canvas
+- **Event-Throttling**: Max 30 Sounds/Sekunde für Performance
+
+### ✨ Neue Features
+- **AudioEngine**: Web Audio API basierte Synthesizer-Engine (`/src/audio/AudioEngine.ts`)
+- **Audio Controls UI**: Neue Komponente mit Volume-Slidern
+  - Master-Volume für Gesamtlautstärke
+  - Musik-Volume für Hintergrundmusik
+  - Event-Volume für Ereignis-Sounds
+  - Mute-Button für schnelles Stummschalten
+  - Musik Start/Stop Toggle
+- **Audio Simulator**: Standalone-Tool zum Testen und Optimieren der Sounds
+  - Erreichbar über Button "Audio Simulator öffnen" in den Audio Controls
+  - Eigene Route `/audio-simulator`
+  - Vollständiges Test-Interface für alle Sounds und Melodien
+
+### 🛠️ Technisch
+- `World.ts`: Event-Tracking hinzugefügt (foodEaten, births, deaths, kills)
+- `Organism.ts`: Kill-Tracking für Jagd-Events
+- `simulationWorker.ts`: Neuer EVENTS Message-Type für Audio-Events
+- `simulationStore.ts`: Audio-State und Actions integriert
+- Neue Dateien:
+  - `/src/audio/AudioEngine.ts` - Singleton AudioEngine
+  - `/src/components/AudioControls.tsx` - UI-Komponente
+  - `/src/pages/AudioSimulatorPage.tsx` - Simulator-Seite
+  - `/public/audio-simulator/` - Standalone Simulator-App
+
+---
+
 ## [1.3.1] - 2025-11-09
 
 ### 🐛 Bugfixes
@@ -133,5 +177,9 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - Chart.js 4.4 + chartjs-plugin-zoom
 - Tailwind CSS
 
+[1.4.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/MichaelHein65/evolution-simulation/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/MichaelHein65/evolution-simulation/releases/tag/v1.0.0

@@ -20,9 +20,10 @@
 - **Routing**: React Router
 - **Charts**: Chart.js / Recharts
 - **Styling**: Tailwind CSS
+- **Audio**: Web Audio API (Synthesizer)
 
 ## Current Status
-✅ Version 1.3.1 - Bugfixes: Canvas-Reset & Chart-Performance
+✅ Version 1.4.0 - Audio Sonification
 
 **Live Demo**: https://michaelhein65.github.io/evolution-simulation/
 **Lokal**: http://localhost:5173/evolution-simulation/
@@ -36,7 +37,19 @@
 - **Keine Limits**: Unbegrenzte Organismen-Anzahl möglich
 - **Volle Performance**: MacBook-Leistung wird optimal genutzt
 
+🎵 **Audio-System**:
+- **AudioEngine**: Web Audio API basierte Synthesizer
+- **Event-Sounds**: Nahrung essen, Geburt, Tod, Jagd-Kill
+- **Hintergrundmusik**: 5 Melodien (eine pro Population)
+- **Dynamischer Mix**: Musik-Lautstärke basiert auf Populationsanteilen
+- **Stereo-Panning**: Sounds links/rechts je nach Position im Canvas
+- **Audio Simulator**: Standalone-Tool zum Testen der Sounds
+
 ## Implementierte Features
+- ✅ **Audio Sonification** - Synthesierte Sounds für alle Events
+- ✅ **Dynamische Hintergrundmusik** - 5 Melodien, Mix nach Populationsverteilung
+- ✅ **Audio Controls UI** - Volume-Slider, Mute, Musik Start/Stop
+- ✅ **Audio Simulator** - Standalone-Tool zum Testen/Optimieren der Sounds
 - ✅ **AI-Hilfe-Seite** - ChatGPT-4o Integration für Fragen und Strategien
 - ✅ **Backend-Server** - Express.js für sichere OpenAI API-Calls
 - ✅ **Kontext-System** - AI erhält vollständigen Spiel-Kontext
@@ -47,7 +60,7 @@
 - ✅ **Optimiertes Routing** - Landing auf /, Simulation auf /simulation, Hilfe auf /help
 - ✅ Web Worker mit kompletter Simulation-Engine
 - ✅ Multi-Threading: Simulation läuft parallel zum Rendering
-- ✅ Message-basierte Kommunikation (INIT, START, STOP, RESET, SET_SPEED)
+- ✅ Message-basierte Kommunikation (INIT, START, STOP, RESET, SET_SPEED, EVENTS)
 - ✅ Render-Daten-Streaming vom Worker zum Main-Thread (jeder 2. Frame)
 - ✅ **Object Pooling** für Pixi.js Graphics (wiederverwendbare Graphics-Objekte)
 - ✅ **Spatial Hash Grid** für O(1) Nachbar-Suche statt O(n²)
@@ -68,6 +81,7 @@
 - ✅ Jagd-Mechanik (oranges Leuchten beim Jagen)
 - ✅ 4 Seiten: Landing, Simulation, Evolution, Einstellungen
 - ✅ 5. Seite: AI-Hilfe mit Chat-Interface
+- ✅ 6. Seite: Audio Simulator
 - ✅ React Router Navigation mit basename für GitHub Pages
 - ✅ Zustand State Management mit Worker-Integration
 - ✅ Tailwind CSS Styling mit Gradients und Backdrop-Blur
@@ -78,11 +92,27 @@
 - ✅ Reset-Buttons für Einstellungen (einzeln & alle)
 - ✅ Performance-Optimierungen für 1000+ Organismen
 
+## Audio-System Details
+### Event-Sounds
+| Event | Dauer | Charakter |
+|-------|-------|-----------|
+| Nahrung essen | 50ms | Kurzer hoher Blip (+200Hz) |
+| Geburt | 150ms | Aufsteigender Sweep (+1 Oktave) |
+| Tod | 200ms | Absteigender Sweep (-1 Oktave) |
+| Jagd-Kill | 100ms | Percussiver Impact mit Noise |
+
+### Population Melodien
+| Population | Frequenz | Waveform | Stil |
+|------------|----------|----------|------|
+| Sprinter | 523 Hz (C5) | Sawtooth | Schnell, Staccato |
+| Tank | 220 Hz (A3) | Sine | Langsam, Legato |
+| Jäger | 392 Hz (G4) | Square | Aggressiv, Moll |
+| Sammler | 330 Hz (E4) | Triangle | Sanft, Pentatonik |
+| Allrounder | 440 Hz (A4) | Sine | Ausgewogen |
+
 ## Nächste Entwicklungsschritte
-- [ ] Performance-Tests mit >1000 Organismen
 - [ ] Mutationen bei Reproduktion implementieren
-- [ ] Evolution-Grafiken optimieren
-- [ ] Räuber-Beute-Mechanik
+- [ ] Räuber-Beute-Mechanik verbessern
 - [ ] Kreuzungen zwischen Populationen
 - [ ] Speichern/Laden
 - [ ] Export-Funktionen

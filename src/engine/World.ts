@@ -2,12 +2,24 @@ import { OrganismClass } from './Organism';
 import { Food, WorldConfig } from '../types';
 import { SpatialHashGrid } from './SpatialHashGrid';
 
+// Event tracking interface
+interface WorldEvents {
+  foodEaten: Array<{ populationId: string; x: number }>;
+  kills: Array<{ attackerId: string; victimId: string; x: number }>;
+}
+
 export class World {
   organisms: OrganismClass[];
   food: Food[];
   config: WorldConfig;
   tick: number;
   private spatialGrid: SpatialHashGrid;
+  
+  // Event tracking
+  private events: WorldEvents = {
+    foodEaten: [],
+    kills: []
+  };
 
   constructor(config: WorldConfig) {
     this.organisms = [];
@@ -15,6 +27,13 @@ export class World {
     this.config = config;
     this.tick = 0;
     this.spatialGrid = new SpatialHashGrid(150); // 150px cells
+  }
+  
+  // Get and clear events (called by worker after each tick)
+  getAndClearEvents(): WorldEvents {
+    const currentEvents = this.events;
+    this.events = { foodEaten: [], kills: [] };
+    return currentEvents;
   }
 
   // Update world state
@@ -39,6 +58,9 @@ export class World {
 
     // Update all organisms
     for (const organism of this.organisms) {
+      // Clear last kill tracking
+      organism.lastKillVictimId = null;
+      
       const needsNearby = organism.traits.aggression > 50 || organism.traits.socialBehavior > 30;
       
       if (needsNearby) {
@@ -72,6 +94,12 @@ export class World {
         if (closestFood) {
           organism.eat(closestFood.energy);
           closestFood.consumed = true;
+          
+          // Track food eaten event
+          this.events.foodEaten.push({
+            populationId: organism.populationId,
+            x: organism.x
+          });
         }
       }
     }
@@ -79,6 +107,17 @@ export class World {
     // Remove dead organisms and consumed food
     this.organisms = this.organisms.filter(o => o.alive);
     this.food = this.food.filter(f => !f.consumed);
+    
+    // Collect kill events from organisms
+    for (const organism of this.organisms) {
+      if (organism.lastKillVictimId) {
+        this.events.kills.push({
+          attackerId: organism.populationId,
+          victimId: organism.lastKillVictimId,
+          x: organism.x
+        });
+      }
+    }
 
     // Spawn new food
     this.spawnFood();
