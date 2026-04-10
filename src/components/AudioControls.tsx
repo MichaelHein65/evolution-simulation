@@ -9,7 +9,6 @@ export const AudioControls = () => {
     musicPlaying,
     running,
     enableAudio,
-    toggleMute,
     startMusic,
     stopMusic,
     setMasterVolume,

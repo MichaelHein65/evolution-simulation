@@ -29,6 +29,7 @@
     "dev": "vite",
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
     "server": "node server.js",
+    "serve:prod": "NODE_ENV=production node server.js",
     "start": "vite & sleep 2 && open -a Safari http://localhost:5173",
     "start:fullscreen": "vite & sleep 3 && osascript -e 'tell application \"Safari\" to activate' -e 'tell application \"Safari\" to open location \"http://localhost:5173\"' -e 'delay 2' -e 'tell application \"System Events\" to keystroke \"f\" using {command down, control down}'",
     "build": "tsc -b && vite build",
@@ -48,10 +49,11 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
-    "zustand": "^5.0.1"
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@types/node": "^24.3.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",

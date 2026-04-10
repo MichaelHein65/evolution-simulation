@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSimulationStore } from '../store/simulationStore';
+import { withApiPath } from '../utils/appPaths';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -197,7 +198,7 @@ WICHTIG:
       // Don't send the initial greeting message
       const chatHistory = messages.slice(1).concat(userMessage);
 
-      const response = await fetch('http://localhost:3001/api/chat', {
+      const response = await fetch(withApiPath('api/chat'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

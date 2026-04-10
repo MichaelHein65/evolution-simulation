@@ -90,3 +90,26 @@ export interface PopulationStats {
   averageTraits: Record<string, Partial<OrganismTraits>>;  // populationId -> traits
   totalOrganisms: number;
 }
+
+export interface RenderOrganism {
+  id: string;
+  x: number;
+  y: number;
+  populationId: string;
+  size: number;
+  energy: number;
+  maxEnergy: number;
+  isHunting: boolean;
+  nearbyAlliesCount: number;
+}
+
+export interface RenderFood {
+  x: number;
+  y: number;
+  energy: number;
+}
+
+export interface RenderData {
+  organisms: RenderOrganism[];
+  food: RenderFood[];
+}

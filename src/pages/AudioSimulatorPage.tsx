@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { withBasePath } from '../utils/appPaths';
 
 export default function AudioSimulatorPage() {
   return (
@@ -27,7 +28,7 @@ export default function AudioSimulatorPage() {
         {/* Embedded Audio Simulator */}
         <div className="bg-gray-800/50 backdrop-blur rounded-xl border border-gray-700 overflow-hidden">
           <iframe
-            src="/evolution-simulation/audio-simulator/"
+            src={withBasePath('audio-simulator/')}
             className="w-full h-[80vh] border-0"
             title="Audio Simulator"
           />
