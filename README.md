@@ -84,6 +84,26 @@ npm run dev:all
 
 Die Anwendung läuft dann auf `http://localhost:5173/` (Frontend) und `http://localhost:3001/` (AI-Backend)
 
+### macOS Launcher
+
+Für den lokalen Start auf macOS liegt zusätzlich ein fertiger App-Launcher im Projekt:
+
+- **`Evolution.app`** startet Frontend und AI-Backend ohne sichtbares Terminal
+- **Safari** wird automatisch geöffnet, nach vorne geholt und in den Vollbildmodus geschaltet
+- **`launch_evolution.sh`** übernimmt den eigentlichen Start und schreibt Fehlerdetails nach `.evolution-launch.log`
+
+Direktstart per Doppelklick:
+
+```bash
+open Evolution.app
+```
+
+Direktstart per Shell:
+
+```bash
+./launch_evolution.sh
+```
+
 ### Alternative Start-Befehle
 
 ```bash
@@ -92,6 +112,7 @@ npm run server     # Nur AI-Backend
 npm run dev:all    # Frontend + Backend gleichzeitig
 npm start          # Server + Safari öffnen
 npm run start:fullscreen  # Server + Safari im Fullscreen
+./launch_evolution.sh     # macOS Launcher ohne Terminal
 ```
 
 ## 🎮 Bedienung

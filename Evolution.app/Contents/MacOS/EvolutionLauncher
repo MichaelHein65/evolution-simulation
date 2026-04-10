@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+APP_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PROJECT_DIR="$(cd "$APP_ROOT/../.." && pwd)"
+RUN_SCRIPT="$PROJECT_DIR/launch_evolution.sh"
+
+if [ ! -x "$RUN_SCRIPT" ]; then
+  osascript -e 'display alert "Evolution" message "launch_evolution.sh wurde nicht gefunden oder ist nicht ausfuehrbar." as critical'
+  exit 1
+fi
+
+nohup "$RUN_SCRIPT" >/dev/null 2>&1 &

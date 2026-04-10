@@ -5,6 +5,15 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [Unreleased]
+
+### ✨ macOS Launcher
+- **`Evolution.app` hinzugefügt** als nativer Starter für das Projektverzeichnis
+- **Versteckter Start**: Frontend und AI-Backend laufen ohne sichtbares Terminalfenster an
+- **Browser im Vordergrund**: Safari wird automatisch geöffnet und in den Vollbildmodus geschaltet
+- **Eigenes Launcher-Skript**: `launch_evolution.sh` wartet auf Frontend und Backend und zeigt bei Fehlern macOS-Dialoge an
+- **Projekt-Icon**: vorhandenes `evolution-icon.png` wird auch als `icns` im App-Bundle verwendet
+
 ## [1.5.0] - 2025-11-29
 
 ### 🎵 Title Melody & Audio Improvements
