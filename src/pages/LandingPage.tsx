@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { titleMelody } from '../audio/TitleMelody';
+import { withBasePath } from '../utils/appPaths';
 
 export default function LandingPage() {
   const [isMusicEnabled, setIsMusicEnabled] = useState(true);
@@ -100,7 +101,7 @@ export default function LandingPage() {
           {/* Hero Animation */}
           <div className="relative max-w-4xl mx-auto my-12 rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-500/30">
             <img 
-              src="/evolution-simulation/20251109_Evolution_Intro.gif"
+              src={withBasePath('20251109_Evolution_Intro.gif')}
               alt="Evolution Simulation Animation"
               className="w-full h-auto"
             />

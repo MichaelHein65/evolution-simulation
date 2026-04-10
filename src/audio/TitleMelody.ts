@@ -7,7 +7,6 @@ class TitleMelodyEngine {
   private context: AudioContext | null = null;
   private masterGain: GainNode | null = null;
   private reverbGain: GainNode | null = null;
-  private convolver: ConvolverNode | null = null;
   private isPlaying = false;
   private noteTimeouts: ReturnType<typeof setTimeout>[] = [];
   private activeOscillators: OscillatorNode[] = [];

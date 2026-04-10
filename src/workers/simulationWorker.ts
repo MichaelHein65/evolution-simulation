@@ -26,6 +26,34 @@ let currentTickEvents: SimulationEvents = {
   kills: []
 };
 
+function getRenderData() {
+  if (!world) {
+    return {
+      organisms: [],
+      food: [],
+    };
+  }
+
+  return {
+    organisms: world.organisms.map((org) => ({
+      id: org.id,
+      x: org.x,
+      y: org.y,
+      populationId: org.populationId,
+      size: org.traits.size,
+      energy: org.energy,
+      maxEnergy: org.traits.maxEnergy,
+      isHunting: org.isHunting,
+      nearbyAlliesCount: org.nearbyAllies.length
+    })),
+    food: world.food.map((food) => ({
+      x: food.x,
+      y: food.y,
+      energy: food.energy
+    }))
+  };
+}
+
 // Message types
 export interface WorkerMessage {
   type: 'INIT' | 'START' | 'STOP' | 'RESET' | 'SET_SPEED' | 'UPDATE_POPULATIONS' | 'UPDATE_WORLD_CONFIG';
@@ -44,7 +72,8 @@ function initializeSimulation(populations: Population[], worldConfig: WorldConfi
 
     // Create initial organisms
     populations.forEach((population) => {
-      for (let i = 0; i < 5; i++) {
+      const initialCount = Math.max(0, Math.floor(population.initialCount));
+      for (let i = 0; i < initialCount; i++) {
         const organism = new OrganismClass(
           `${population.id}-${i}`,
           population.id,
@@ -59,7 +88,11 @@ function initializeSimulation(populations: Population[], worldConfig: WorldConfi
 
     self.postMessage({
       type: 'INITIALIZED',
-      payload: { success: true }
+      payload: {
+        success: true,
+        renderData: getRenderData(),
+        stats: world.getStats(),
+      }
     } as WorkerResponse);
   } catch (error) {
     self.postMessage({
@@ -128,24 +161,7 @@ function simulationLoop() {
     renderFrameCounter++;
     if (renderFrameCounter % 2 === 0) {
       const mapStart = performance.now();
-      const renderData = {
-        organisms: world.organisms.map(org => ({
-          id: org.id,
-          x: org.x,
-          y: org.y,
-          populationId: org.populationId,
-          size: org.traits.size,
-          energy: org.energy,
-          maxEnergy: org.traits.maxEnergy,
-          isHunting: org.isHunting,
-          nearbyAlliesCount: org.nearbyAllies.length
-        })),
-        food: world.food.map(f => ({
-          x: f.x,
-          y: f.y,
-          energy: f.energy
-        }))
-      };
+      const renderData = getRenderData();
       const mapTime = performance.now() - mapStart;
 
       const postStart = performance.now();

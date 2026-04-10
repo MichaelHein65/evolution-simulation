@@ -1,6 +1,6 @@
 // Simulation Store using Zustand with Web Worker
 import { create } from 'zustand';
-import type { Population, WorldConfig, PopulationStats } from '../types';
+import type { Population, WorldConfig, PopulationStats, RenderData } from '../types';
 import { DEFAULT_POPULATIONS, DEFAULT_WORLD_CONFIG } from '../utils/constants';
 import { audioEngine, SimulationEvents } from '../audio/AudioEngine';
 
@@ -12,14 +12,85 @@ import SimulationWorkerUrl from '../workers/simulationWorker?worker&url';
 const STORAGE_KEY_POPULATIONS = 'evolution-sim-populations';
 const STORAGE_KEY_WORLD_CONFIG = 'evolution-sim-world-config';
 
+const isValidNumber = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isFinite(value);
+
+const normalizeStoredPopulations = (stored: unknown): Population[] | null => {
+  if (!Array.isArray(stored)) {
+    return null;
+  }
+
+  const defaultById = new Map(DEFAULT_POPULATIONS.map((population) => [population.id, population]));
+
+  const normalized = DEFAULT_POPULATIONS.map((defaultPopulation) => {
+    const candidate = stored.find((entry): entry is Partial<Population> & { id: string } =>
+      typeof entry === 'object' &&
+      entry !== null &&
+      'id' in entry &&
+      (entry as { id?: unknown }).id === defaultPopulation.id
+    );
+
+    if (!candidate) {
+      return defaultPopulation;
+    }
+
+    const nextTraits = { ...defaultPopulation.defaultTraits };
+    const candidateTraits = candidate.defaultTraits;
+
+    if (candidateTraits && typeof candidateTraits === 'object') {
+      for (const [traitName, defaultValue] of Object.entries(defaultPopulation.defaultTraits)) {
+        const candidateValue = (candidateTraits as unknown as Record<string, unknown>)[traitName];
+        if (isValidNumber(candidateValue)) {
+          nextTraits[traitName as keyof typeof nextTraits] = candidateValue;
+        } else {
+          nextTraits[traitName as keyof typeof nextTraits] = defaultValue;
+        }
+      }
+    }
+
+    return {
+      ...defaultPopulation,
+      name: typeof candidate.name === 'string' ? candidate.name : defaultPopulation.name,
+      color: typeof candidate.color === 'string' ? candidate.color : defaultPopulation.color,
+      mutationRate: isValidNumber(candidate.mutationRate) ? candidate.mutationRate : defaultPopulation.mutationRate,
+      initialCount: isValidNumber(candidate.initialCount) ? Math.max(0, Math.floor(candidate.initialCount)) : defaultPopulation.initialCount,
+      defaultTraits: nextTraits,
+    };
+  });
+
+  const hasPositiveStartPopulation = normalized.some((population) => population.initialCount > 0);
+  if (!hasPositiveStartPopulation) {
+    console.warn('Stored populations contain no starting organisms. Falling back to defaults.');
+    return DEFAULT_POPULATIONS;
+  }
+
+  const hasUnknownOnly = stored.every((entry) => {
+    if (!entry || typeof entry !== 'object' || !('id' in entry)) {
+      return true;
+    }
+    return !defaultById.has((entry as { id: string }).id);
+  });
+
+  if (hasUnknownOnly) {
+    return DEFAULT_POPULATIONS;
+  }
+
+  return normalized;
+};
+
 // Load from localStorage
 const loadPopulations = (): Population[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY_POPULATIONS);
     if (stored) {
       const parsed = JSON.parse(stored);
-      console.log('✅ Loaded populations from localStorage');
-      return parsed;
+      const normalized = normalizeStoredPopulations(parsed);
+      if (normalized) {
+        localStorage.setItem(STORAGE_KEY_POPULATIONS, JSON.stringify(normalized));
+        console.log('✅ Loaded populations from localStorage');
+        return normalized;
+      }
+      console.warn('Stored populations were invalid. Falling back to defaults.');
     }
   } catch (error) {
     console.warn('Failed to load populations from localStorage:', error);
@@ -61,6 +132,8 @@ const saveWorldConfig = (config: WorldConfig) => {
 interface SimulationStore {
   // Worker
   worker: Worker | null;
+  workerReady: boolean;
+  pendingStart: boolean;
   
   // Simulation state
   running: boolean;
@@ -76,22 +149,8 @@ interface SimulationStore {
   
   // Render data received from worker
   renderData: {
-    organisms: Array<{
-      id: string;
-      x: number;
-      y: number;
-      populationId: string;
-      size: number;
-      energy: number;
-      maxEnergy: number;
-      isHunting: boolean;
-      nearbyAlliesCount: number;
-    }>;
-    food: Array<{
-      x: number;
-      y: number;
-      energy: number;
-    }>;
+    organisms: RenderData['organisms'];
+    food: RenderData['food'];
   } | null;
 
   // Actions
@@ -114,9 +173,11 @@ interface SimulationStore {
   setEventVolume: (value: number) => void;
 }
 
-export const useSimulationStore = create<SimulationStore>((set, get) => ({
+export const useSimulationStore = create<SimulationStore>()((set, get) => ({
   // Initial state - load from localStorage
   worker: null,
+  workerReady: false,
+  pendingStart: false,
   running: false,
   speed: 1,
   tick: 0,
@@ -151,6 +212,24 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
       switch (type) {
         case 'INITIALIZED':
           console.log('✅ Worker initialized successfully');
+          set({
+            workerReady: true,
+            tick: payload?.stats?.tick ?? 0,
+            renderData: payload?.renderData ?? null,
+            statsHistory: payload?.stats
+              ? [{
+                  tick: payload.stats.tick,
+                  populationCounts: payload.stats.populationCounts,
+                  averageTraits: {},
+                  totalOrganisms: payload.stats.totalOrganisms,
+                }]
+              : [],
+          });
+
+          if (get().pendingStart) {
+            worker.postMessage({ type: 'START' });
+            set({ running: true, pendingStart: false });
+          }
           break;
           
         case 'RENDER_DATA':
@@ -222,6 +301,8 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
 
     set({
       worker,
+      workerReady: false,
+      pendingStart: false,
       tick: 0,
       statsHistory: [],
       renderData: null,
@@ -231,10 +312,17 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
 
   // Start simulation
   startSimulation: () => {
-    const { worker } = get();
+    const { worker, workerReady } = get();
     if (!worker) {
       console.warn('Worker not initialized, initializing now...');
+      set({ pendingStart: true });
       get().initializeSimulation();
+      return;
+    }
+
+    if (!workerReady) {
+      console.log('⏳ Worker initialisiert noch, Start wird nachgezogen...');
+      set({ pendingStart: true });
       return;
     }
     
@@ -265,6 +353,8 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
     });
     
     set({
+      workerReady: true,
+      pendingStart: false,
       running: false,
       tick: 0,
       statsHistory: [],
